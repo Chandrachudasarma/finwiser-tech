@@ -1,0 +1,4 @@
+# finwiser.tech mirrors finwiser.org content; block crawling to avoid duplicate-content
+# competition with the canonical site. Remove this file if finwiser.tech becomes primary.
+User-agent: *
+Disallow: /
