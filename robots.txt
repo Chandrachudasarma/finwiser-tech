@@ -1,7 +1,9 @@
 # finwiser.tech mirrors finwiser.org content; block crawling to avoid duplicate-content
 # competition with the canonical site. Remove this file if finwiser.tech becomes primary.
-# Exception: /google/ is a standalone company/product verification page kept crawlable
-# so program reviewers (e.g. cloud-credit / accelerator verifiers) can reach it.
+# Exception: /google/ and /nvidia/ are standalone reviewer-facing verification pages kept
+# crawlable so program reviewers (e.g. cloud-credit / accelerator / NVIDIA Inception
+# verifiers) and their automated fetchers can reach them.
 User-agent: *
 Disallow: /
 Allow: /google/
+Allow: /nvidia/
