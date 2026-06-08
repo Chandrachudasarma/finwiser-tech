@@ -1,9 +1,8 @@
-# finwiser.tech mirrors finwiser.org content; block crawling to avoid duplicate-content
-# competition with the canonical site. Remove this file if finwiser.tech becomes primary.
-# Exception: /google/ and /nvidia/ are standalone reviewer-facing verification pages kept
-# crawlable so program reviewers (e.g. cloud-credit / accelerator / NVIDIA Inception
-# verifiers) and their automated fetchers can reach them.
+# finwiser.tech is the live website for Finwiser Technologies LLP.
+# Fully crawlable so program verifiers (NVIDIA Inception, cloud-credit
+# reviewers, accelerators) and their automated fetchers can confirm a
+# valid, content-rich company website at the root domain.
+# Note: intentionally NO rel=canonical to finwiser.org — the LLP (.tech)
+# is kept as a separate entity from the proprietorship (.org).
 User-agent: *
-Disallow: /
-Allow: /google/
-Allow: /nvidia/
+Allow: /
