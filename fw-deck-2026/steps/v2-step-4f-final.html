@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box ④ — Final · Light document · black interlocking broken chains · red stamp</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { background: #111; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 24px;
+  }
+
+  /* lift the true 290x560 column to ~1.6x for desk-distance review */
+  #s4 .stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===================================================================== */
+  /* 290 x 560 CONTRACT                                                      */
+  /* ===================================================================== */
+  #s4 .node-col {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  #s4 .step-box {
+    border-radius: 16px;
+    padding: 12px 8px 0;
+  }
+  #s4 #s4-inner {
+    position: static; width: 100%; height: 100%; text-align: center;
+  }
+
+  #s4 .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    z-index: 6;
+  }
+  #s4 .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+  }
+  #s4 .role {
+    position: absolute; top: 78px; left: 0; right: 0;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px; line-height: 1;
+    z-index: 6;
+  }
+  #s4 .frame {
+    position: absolute; top: 104px; left: 22px; right: 22px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    z-index: 6;
+  }
+  #s4 .triangle { position: absolute; inset: 0; }
+  #s4 .tri-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 2;
+  }
+  #s4 .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    z-index: 5;             /* ON TOP of chains so opaque pills occlude chain ends */
+  }
+  #s4 .node .nlabel {
+    font-size: 10.5px; line-height: 1.18; font-weight: 700;
+    letter-spacing: 0.1px;
+    border-radius: 8px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+  #s4 .node.apex  { left: 145px; top: 175px; }
+  #s4 .node.left  { left: 62px;  top: 350px; }
+  #s4 .node.right { left: 228px; top: 350px; }
+
+  #s4 .stamp { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+  #s4 .stamp .stamp-svg {
+    position: absolute; left: 145px; top: 415px;
+    transform: translate(-50%, -50%) rotate(-8deg);
+    width: 276px; height: 70px;
+    display: block;
+    opacity: 0.94;
+  }
+
+  #s4 .verdict {
+    position: absolute; top: 470px; left: 20px; right: 20px;
+    padding-top: 18px;
+    text-align: center;
+    z-index: 6;
+  }
+  #s4 .verdict .principle {
+    font-size: 14px; line-height: 1.45; font-weight: 700;
+    letter-spacing: 0.1px;
+    max-width: 250px; margin: 0 auto;
+  }
+
+  /* ===================================================================== */
+  /* LIGHT "DOCUMENT" CARD                                                   */
+  /* ===================================================================== */
+  #s4 #s4-col.step-box.dead {
+    background: linear-gradient(180deg, #f7eef0 0%, #efe2e4 100%);
+    border: 1.5px dashed rgba(150,92,106,0.40);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+  }
+  #s4 #s4-inner { color: #1a1a2e; }
+
+  #s4 .avatar {
+    border: 2px solid #2a2230; background: rgba(255,255,255,0.6);
+    color: #1a1a2e; box-shadow: 0 0 14px rgba(42,34,48,0.12);
+  }
+  #s4 .avatar .lock {
+    background: #2a2230; border: 1px solid #2a2230;
+    color: rgba(247,238,240,0.96);
+  }
+  #s4 .role { color: #1a1a2e; }
+  #s4 .frame { color: rgba(26,26,46,0.72); }
+  #s4 .frame .strong { font-weight: 700; color: #1a1a2e; }
+
+  /* OPAQUE white pills sitting ON TOP of the chains */
+  #s4 .node .nlabel {
+    color: #1a1a2e;
+    background: #ffffff;
+    border: 1px solid rgba(150,92,106,0.30);
+    box-shadow: 0 2px 7px rgba(0,0,0,0.20), 0 0 0 3px #ffffff;
+  }
+
+  #s4 .stamp .stamp-svg {
+    filter: drop-shadow(0 1px 4px rgba(210,58,77,0.22));
+  }
+  #s4 .verdict {
+    border-top: 1px solid rgba(150,92,106,0.30);
+  }
+  #s4 .verdict .principle { color: #1a1a2e; }
+
+  /* ===================================================================== */
+  /* REALISTIC INTERLOCKING BLACK BROKEN CHAINS                              */
+  /* ===================================================================== */
+  #s4 .chain path {
+    fill: #1f1a2b;          /* near-black, crisp on the light page */
+    fill-rule: evenodd;     /* punched hole = real link */
+    stroke: rgba(10,8,16,0.55);
+    stroke-width: 0.5;
+  }
+  #s4 .shatter path {
+    fill: #1f1a2b;          /* black shards */
+    stroke: none;
+    opacity: 0.92;
+  }
+</style>
+</head>
+<body>
+
+  <div id="s4">
+    <div class="stage">
+      <div id="s4-col" class="node-col step-box dead">
+        <div id="s4-inner">
+
+          <!-- ① AVATAR — locked, dead -->
+          <div class="avatar">4<span class="lock">&#128274;</span></div>
+
+          <!-- ② ROLE -->
+          <div class="role">The Investment Adviser</div>
+
+          <!-- ③ FRAMING LINE -->
+          <div class="frame">Holistic advice forms only where <span class="strong">all three connect.</span></div>
+
+          <!-- ④ THE TRIANGLE -->
+          <div class="triangle">
+            <svg class="tri-svg" viewBox="0 0 290 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="s4-chain-shadow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="0.7" stdDeviation="0.9"
+                                flood-color="rgba(120,80,90,0.40)"/>
+                </filter>
+              </defs>
+
+              <g filter="url(#s4-chain-shadow)">
+                  <!-- EDGE A: (145, 175) -> (62, 350) -->
+                  <g class="chain">
+                  <path d="M150.99 172.86 L147.14 180.99 A4.50 4.50 0 0 1 139.01 177.14 L142.86 169.01 A4.50 4.50 0 0 1 150.99 172.86 Z M147.80 174.00 L146.00 177.80 A2.10 2.10 0 0 1 142.20 176.00 L144.00 172.20 A2.10 2.10 0 0 1 147.80 174.00 Z"/>
+                  <path d="M142.18 190.60 L134.70 187.05 A4.14 4.14 0 0 1 138.25 179.57 L145.73 183.12 A4.14 4.14 0 0 1 142.18 190.60 Z M141.04 187.40 L137.90 185.91 A1.74 1.74 0 0 1 139.39 182.77 L142.54 184.26 A1.74 1.74 0 0 1 141.04 187.40 Z"/>
+                  <path d="M141.43 193.03 L137.57 201.16 A4.50 4.50 0 0 1 129.44 197.30 L133.30 189.17 A4.50 4.50 0 0 1 141.43 193.03 Z M138.23 194.17 L136.43 197.96 A2.10 2.10 0 0 1 132.64 196.16 L134.44 192.37 A2.10 2.10 0 0 1 138.23 194.17 Z"/>
+                  <path d="M132.62 210.76 L125.14 207.22 A4.14 4.14 0 0 1 128.69 199.74 L136.17 203.28 A4.14 4.14 0 0 1 132.62 210.76 Z M131.48 207.57 L128.34 206.08 A1.74 1.74 0 0 1 129.83 202.93 L132.97 204.42 A1.74 1.74 0 0 1 131.48 207.57 Z"/>
+                  <path d="M131.86 213.20 L128.01 221.33 A4.50 4.50 0 0 1 119.88 217.47 L123.73 209.34 A4.50 4.50 0 0 1 131.86 213.20 Z M128.67 214.34 L126.87 218.13 A2.10 2.10 0 0 1 123.07 216.33 L124.87 212.54 A2.10 2.10 0 0 1 128.67 214.34 Z"/>
+                  <path d="M123.05 230.93 L115.57 227.38 A4.14 4.14 0 0 1 119.12 219.90 L126.60 223.45 A4.14 4.14 0 0 1 123.05 230.93 Z M121.91 227.73 L118.77 226.24 A1.74 1.74 0 0 1 120.26 223.10 L123.41 224.59 A1.74 1.74 0 0 1 121.91 227.73 Z"/>
+                  <path d="M122.30 233.36 L118.44 241.49 A4.50 4.50 0 0 1 110.31 237.64 L114.17 229.51 A4.50 4.50 0 0 1 122.30 233.36 Z M119.10 234.50 L117.30 238.30 A2.10 2.10 0 0 1 113.51 236.50 L115.31 232.70 A2.10 2.10 0 0 1 119.10 234.50 Z"/>
+                  <path d="M113.49 251.10 L106.01 247.55 A4.14 4.14 0 0 1 109.56 240.07 L117.04 243.62 A4.14 4.14 0 0 1 113.49 251.10 Z M112.35 247.90 L109.21 246.41 A1.74 1.74 0 0 1 110.70 243.27 L113.84 244.76 A1.74 1.74 0 0 1 112.35 247.90 Z"/>
+                  <path d="M67.99 347.86 L64.14 355.99 A4.50 4.50 0 0 1 56.01 352.14 L59.86 344.01 A4.50 4.50 0 0 1 67.99 347.86 Z M64.80 349.00 L63.00 352.80 A2.10 2.10 0 0 1 59.20 351.00 L61.00 347.20 A2.10 2.10 0 0 1 64.80 349.00 Z"/>
+                  <path d="M68.75 345.43 L61.27 341.88 A4.14 4.14 0 0 1 64.82 334.40 L72.30 337.95 A4.14 4.14 0 0 1 68.75 345.43 Z M67.61 342.23 L64.46 340.74 A1.74 1.74 0 0 1 65.96 337.60 L69.10 339.09 A1.74 1.74 0 0 1 67.61 342.23 Z"/>
+                  <path d="M77.56 327.70 L73.70 335.83 A4.50 4.50 0 0 1 65.57 331.97 L69.43 323.84 A4.50 4.50 0 0 1 77.56 327.70 Z M74.36 328.84 L72.56 332.63 A2.10 2.10 0 0 1 68.77 330.83 L70.57 327.04 A2.10 2.10 0 0 1 74.36 328.84 Z"/>
+                  <path d="M78.31 325.26 L70.83 321.72 A4.14 4.14 0 0 1 74.38 314.24 L81.86 317.78 A4.14 4.14 0 0 1 78.31 325.26 Z M77.17 322.07 L74.03 320.58 A1.74 1.74 0 0 1 75.52 317.43 L78.66 318.92 A1.74 1.74 0 0 1 77.17 322.07 Z"/>
+                  <path d="M87.12 307.53 L83.27 315.66 A4.50 4.50 0 0 1 75.14 311.80 L78.99 303.67 A4.50 4.50 0 0 1 87.12 307.53 Z M83.93 308.67 L82.13 312.46 A2.10 2.10 0 0 1 78.33 310.66 L80.13 306.87 A2.10 2.10 0 0 1 83.93 308.67 Z"/>
+                  <path d="M87.88 305.10 L80.40 301.55 A4.14 4.14 0 0 1 83.95 294.07 L91.43 297.62 A4.14 4.14 0 0 1 87.88 305.10 Z M86.74 301.90 L83.59 300.41 A1.74 1.74 0 0 1 85.09 297.27 L88.23 298.76 A1.74 1.74 0 0 1 86.74 301.90 Z"/>
+                  <path d="M96.69 287.36 L92.83 295.49 A4.50 4.50 0 0 1 84.70 291.64 L88.56 283.51 A4.50 4.50 0 0 1 96.69 287.36 Z M93.49 288.50 L91.69 292.30 A2.10 2.10 0 0 1 87.90 290.50 L89.70 286.70 A2.10 2.10 0 0 1 93.49 288.50 Z"/>
+                  <path d="M97.44 284.93 L89.96 281.38 A4.14 4.14 0 0 1 93.51 273.90 L100.99 277.45 A4.14 4.14 0 0 1 97.44 284.93 Z M96.30 281.73 L93.16 280.24 A1.74 1.74 0 0 1 94.65 277.10 L97.79 278.59 A1.74 1.74 0 0 1 96.30 281.73 Z"/>
+                  </g>
+                  <g class="shatter">
+                  <path d="M104.17 261.31 L96.56 258.62 L102.83 263.69 Z"/>
+                  <path d="M104.00 263.47 L112.98 257.59 L103.00 261.53 Z"/>
+                  <path d="M102.76 262.67 L105.32 270.51 L104.24 262.33 Z"/>
+                  <path d="M104.79 262.01 L100.62 254.90 L102.21 262.99 Z"/>
+                  <path d="M103.25 263.02 L110.67 265.89 L103.75 261.98 Z"/>
+                  <path d="M104.42 262.62 L104.70 252.91 L102.58 262.38 Z"/>
+                  <path d="M102.73 262.10 L97.81 273.49 L104.27 262.90 Z"/>
+                  <path d="M102.75 262.70 L106.17 272.45 L104.25 262.30 Z"/>
+                  <path d="M102.79 263.35 L114.42 271.63 L104.21 261.65 Z"/>
+                  <path d="M104.24 262.06 L95.94 249.75 L102.76 262.94 Z"/>
+                  <path d="M102.91 261.87 L96.07 269.54 L104.09 263.13 Z"/>
+                  </g>
+                  <!-- EDGE B: (145, 175) -> (228, 350) -->
+                  <g class="chain">
+                  <path d="M147.14 169.01 L150.99 177.14 A4.50 4.50 0 0 1 142.86 180.99 L139.01 172.86 A4.50 4.50 0 0 1 147.14 169.01 Z M146.00 172.20 L147.80 176.00 A2.10 2.10 0 0 1 144.00 177.80 L142.20 174.00 A2.10 2.10 0 0 1 146.00 172.20 Z"/>
+                  <path d="M155.30 187.05 L147.82 190.60 A4.14 4.14 0 0 1 144.27 183.12 L151.75 179.57 A4.14 4.14 0 0 1 155.30 187.05 Z M152.10 185.91 L148.96 187.40 A1.74 1.74 0 0 1 147.46 184.26 L150.61 182.77 A1.74 1.74 0 0 1 152.10 185.91 Z"/>
+                  <path d="M156.70 189.17 L160.56 197.30 A4.50 4.50 0 0 1 152.43 201.16 L148.57 193.03 A4.50 4.50 0 0 1 156.70 189.17 Z M155.56 192.37 L157.36 196.16 A2.10 2.10 0 0 1 153.57 197.96 L151.77 194.17 A2.10 2.10 0 0 1 155.56 192.37 Z"/>
+                  <path d="M164.86 207.22 L157.38 210.76 A4.14 4.14 0 0 1 153.83 203.28 L161.31 199.74 A4.14 4.14 0 0 1 164.86 207.22 Z M161.66 206.08 L158.52 207.57 A1.74 1.74 0 0 1 157.03 204.42 L160.17 202.93 A1.74 1.74 0 0 1 161.66 206.08 Z"/>
+                  <path d="M166.27 209.34 L170.12 217.47 A4.50 4.50 0 0 1 161.99 221.33 L158.14 213.20 A4.50 4.50 0 0 1 166.27 209.34 Z M165.13 212.54 L166.93 216.33 A2.10 2.10 0 0 1 163.13 218.13 L161.33 214.34 A2.10 2.10 0 0 1 165.13 212.54 Z"/>
+                  <path d="M174.43 227.38 L166.95 230.93 A4.14 4.14 0 0 1 163.40 223.45 L170.88 219.90 A4.14 4.14 0 0 1 174.43 227.38 Z M171.23 226.24 L168.09 227.73 A1.74 1.74 0 0 1 166.59 224.59 L169.74 223.10 A1.74 1.74 0 0 1 171.23 226.24 Z"/>
+                  <path d="M175.83 229.51 L179.69 237.64 A4.50 4.50 0 0 1 171.56 241.49 L167.70 233.36 A4.50 4.50 0 0 1 175.83 229.51 Z M174.69 232.70 L176.49 236.50 A2.10 2.10 0 0 1 172.70 238.30 L170.90 234.50 A2.10 2.10 0 0 1 174.69 232.70 Z"/>
+                  <path d="M183.99 247.55 L176.51 251.10 A4.14 4.14 0 0 1 172.96 243.62 L180.44 240.07 A4.14 4.14 0 0 1 183.99 247.55 Z M180.79 246.41 L177.65 247.90 A1.74 1.74 0 0 1 176.16 244.76 L179.30 243.27 A1.74 1.74 0 0 1 180.79 246.41 Z"/>
+                  <path d="M230.14 344.01 L233.99 352.14 A4.50 4.50 0 0 1 225.86 355.99 L222.01 347.86 A4.50 4.50 0 0 1 230.14 344.01 Z M229.00 347.20 L230.80 351.00 A2.10 2.10 0 0 1 227.00 352.80 L225.20 349.00 A2.10 2.10 0 0 1 229.00 347.20 Z"/>
+                  <path d="M228.73 341.88 L221.25 345.43 A4.14 4.14 0 0 1 217.70 337.95 L225.18 334.40 A4.14 4.14 0 0 1 228.73 341.88 Z M225.54 340.74 L222.39 342.23 A1.74 1.74 0 0 1 220.90 339.09 L224.04 337.60 A1.74 1.74 0 0 1 225.54 340.74 Z"/>
+                  <path d="M220.57 323.84 L224.43 331.97 A4.50 4.50 0 0 1 216.30 335.83 L212.44 327.70 A4.50 4.50 0 0 1 220.57 323.84 Z M219.43 327.04 L221.23 330.83 A2.10 2.10 0 0 1 217.44 332.63 L215.64 328.84 A2.10 2.10 0 0 1 219.43 327.04 Z"/>
+                  <path d="M219.17 321.72 L211.69 325.26 A4.14 4.14 0 0 1 208.14 317.78 L215.62 314.24 A4.14 4.14 0 0 1 219.17 321.72 Z M215.97 320.58 L212.83 322.07 A1.74 1.74 0 0 1 211.34 318.92 L214.48 317.43 A1.74 1.74 0 0 1 215.97 320.58 Z"/>
+                  <path d="M211.01 303.67 L214.86 311.80 A4.50 4.50 0 0 1 206.73 315.66 L202.88 307.53 A4.50 4.50 0 0 1 211.01 303.67 Z M209.87 306.87 L211.67 310.66 A2.10 2.10 0 0 1 207.87 312.46 L206.07 308.67 A2.10 2.10 0 0 1 209.87 306.87 Z"/>
+                  <path d="M209.60 301.55 L202.12 305.10 A4.14 4.14 0 0 1 198.57 297.62 L206.05 294.07 A4.14 4.14 0 0 1 209.60 301.55 Z M206.41 300.41 L203.26 301.90 A1.74 1.74 0 0 1 201.77 298.76 L204.91 297.27 A1.74 1.74 0 0 1 206.41 300.41 Z"/>
+                  <path d="M201.44 283.51 L205.30 291.64 A4.50 4.50 0 0 1 197.17 295.49 L193.31 287.36 A4.50 4.50 0 0 1 201.44 283.51 Z M200.30 286.70 L202.10 290.50 A2.10 2.10 0 0 1 198.31 292.30 L196.51 288.50 A2.10 2.10 0 0 1 200.30 286.70 Z"/>
+                  <path d="M200.04 281.38 L192.56 284.93 A4.14 4.14 0 0 1 189.01 277.45 L196.49 273.90 A4.14 4.14 0 0 1 200.04 281.38 Z M196.84 280.24 L193.70 281.73 A1.74 1.74 0 0 1 192.21 278.59 L195.35 277.10 A1.74 1.74 0 0 1 196.84 280.24 Z"/>
+                  </g>
+                  <g class="shatter">
+                  <path d="M187.37 262.58 L187.58 250.10 L185.63 262.42 Z"/>
+                  <path d="M185.20 262.94 L190.59 274.59 L187.80 262.06 Z"/>
+                  <path d="M186.27 262.02 L173.46 268.86 L186.73 262.98 Z"/>
+                  <path d="M186.66 261.57 L178.61 261.11 L186.34 263.43 Z"/>
+                  <path d="M187.12 261.76 L175.36 253.13 L185.88 263.24 Z"/>
+                  <path d="M186.95 262.92 L192.79 255.70 L186.05 262.08 Z"/>
+                  <path d="M186.25 261.39 L173.67 265.37 L186.75 263.61 Z"/>
+                  <path d="M186.33 263.21 L194.76 264.44 L186.67 261.79 Z"/>
+                  <path d="M186.37 261.77 L172.12 265.10 L186.63 263.23 Z"/>
+                  <path d="M186.14 263.73 L200.86 266.76 L186.86 261.27 Z"/>
+                  <path d="M187.23 262.60 L187.33 256.17 L185.77 262.40 Z"/>
+                  </g>
+                  <!-- EDGE C: (62, 350) -> (228, 350) -->
+                  <g class="chain">
+                  <path d="M57.80 345.70 L66.20 345.70 A4.30 4.30 0 0 1 66.20 354.30 L57.80 354.30 A4.30 4.30 0 0 1 57.80 345.70 Z M60.10 348.00 L63.90 348.00 A2.00 2.00 0 0 1 63.90 352.00 L60.10 352.00 A2.00 2.00 0 0 1 60.10 348.00 Z"/>
+                  <path d="M76.50 346.14 L76.50 353.86 A3.96 3.96 0 0 1 68.58 353.86 L68.58 346.14 A3.96 3.96 0 0 1 76.50 346.14 Z M74.20 348.44 L74.20 351.56 A1.66 1.66 0 0 1 70.88 351.56 L70.88 348.44 A1.66 1.66 0 0 1 74.20 348.44 Z"/>
+                  <path d="M78.88 345.70 L87.28 345.70 A4.30 4.30 0 0 1 87.28 354.30 L78.88 354.30 A4.30 4.30 0 0 1 78.88 345.70 Z M81.18 348.00 L84.98 348.00 A2.00 2.00 0 0 1 84.98 352.00 L81.18 352.00 A2.00 2.00 0 0 1 81.18 348.00 Z"/>
+                  <path d="M97.58 346.14 L97.58 353.86 A3.96 3.96 0 0 1 89.66 353.86 L89.66 346.14 A3.96 3.96 0 0 1 97.58 346.14 Z M95.28 348.44 L95.28 351.56 A1.66 1.66 0 0 1 91.96 351.56 L91.96 348.44 A1.66 1.66 0 0 1 95.28 348.44 Z"/>
+                  <path d="M99.96 345.70 L108.36 345.70 A4.30 4.30 0 0 1 108.36 354.30 L99.96 354.30 A4.30 4.30 0 0 1 99.96 345.70 Z M102.26 348.00 L106.06 348.00 A2.00 2.00 0 0 1 106.06 352.00 L102.26 352.00 A2.00 2.00 0 0 1 102.26 348.00 Z"/>
+                  <path d="M118.66 346.14 L118.66 353.86 A3.96 3.96 0 0 1 110.74 353.86 L110.74 346.14 A3.96 3.96 0 0 1 118.66 346.14 Z M116.36 348.44 L116.36 351.56 A1.66 1.66 0 0 1 113.04 351.56 L113.04 348.44 A1.66 1.66 0 0 1 116.36 348.44 Z"/>
+                  <path d="M121.04 345.70 L129.44 345.70 A4.30 4.30 0 0 1 129.44 354.30 L121.04 354.30 A4.30 4.30 0 0 1 121.04 345.70 Z M123.34 348.00 L127.14 348.00 A2.00 2.00 0 0 1 127.14 352.00 L123.34 352.00 A2.00 2.00 0 0 1 123.34 348.00 Z"/>
+                  <path d="M223.80 345.70 L232.20 345.70 A4.30 4.30 0 0 1 232.20 354.30 L223.80 354.30 A4.30 4.30 0 0 1 223.80 345.70 Z M226.10 348.00 L229.90 348.00 A2.00 2.00 0 0 1 229.90 352.00 L226.10 352.00 A2.00 2.00 0 0 1 226.10 348.00 Z"/>
+                  <path d="M221.42 346.14 L221.42 353.86 A3.96 3.96 0 0 1 213.50 353.86 L213.50 346.14 A3.96 3.96 0 0 1 221.42 346.14 Z M219.12 348.44 L219.12 351.56 A1.66 1.66 0 0 1 215.80 351.56 L215.80 348.44 A1.66 1.66 0 0 1 219.12 348.44 Z"/>
+                  <path d="M202.72 345.70 L211.12 345.70 A4.30 4.30 0 0 1 211.12 354.30 L202.72 354.30 A4.30 4.30 0 0 1 202.72 345.70 Z M205.02 348.00 L208.82 348.00 A2.00 2.00 0 0 1 208.82 352.00 L205.02 352.00 A2.00 2.00 0 0 1 205.02 348.00 Z"/>
+                  <path d="M200.34 346.14 L200.34 353.86 A3.96 3.96 0 0 1 192.42 353.86 L192.42 346.14 A3.96 3.96 0 0 1 200.34 346.14 Z M198.04 348.44 L198.04 351.56 A1.66 1.66 0 0 1 194.72 351.56 L194.72 348.44 A1.66 1.66 0 0 1 198.04 348.44 Z"/>
+                  <path d="M181.64 345.70 L190.04 345.70 A4.30 4.30 0 0 1 190.04 354.30 L181.64 354.30 A4.30 4.30 0 0 1 181.64 345.70 Z M183.94 348.00 L187.74 348.00 A2.00 2.00 0 0 1 187.74 352.00 L183.94 352.00 A2.00 2.00 0 0 1 183.94 348.00 Z"/>
+                  <path d="M179.26 346.14 L179.26 353.86 A3.96 3.96 0 0 1 171.34 353.86 L171.34 346.14 A3.96 3.96 0 0 1 179.26 346.14 Z M176.96 348.44 L176.96 351.56 A1.66 1.66 0 0 1 173.64 351.56 L173.64 348.44 A1.66 1.66 0 0 1 176.96 348.44 Z"/>
+                  <path d="M160.56 345.70 L168.96 345.70 A4.30 4.30 0 0 1 168.96 354.30 L160.56 354.30 A4.30 4.30 0 0 1 160.56 345.70 Z M162.86 348.00 L166.66 348.00 A2.00 2.00 0 0 1 166.66 352.00 L162.86 352.00 A2.00 2.00 0 0 1 162.86 348.00 Z"/>
+                  </g>
+                  <g class="shatter">
+                  <path d="M144.87 350.66 L160.38 353.10 L145.13 349.34 Z"/>
+                  <path d="M145.03 350.73 L160.46 349.46 L144.97 349.27 Z"/>
+                  <path d="M145.09 349.14 L135.07 348.98 L144.91 350.86 Z"/>
+                  <path d="M145.71 350.18 L148.52 336.16 L144.29 349.82 Z"/>
+                  <path d="M145.28 349.00 L132.63 346.50 L144.72 351.00 Z"/>
+                  <path d="M144.35 350.68 L152.16 356.85 L145.65 349.32 Z"/>
+                  <path d="M145.51 350.98 L157.64 343.47 L144.49 349.02 Z"/>
+                  <path d="M144.31 349.87 L142.10 365.11 L145.69 350.13 Z"/>
+                  <path d="M144.12 349.46 L141.03 356.45 L145.88 350.54 Z"/>
+                  <path d="M146.19 350.35 L148.68 337.51 L143.81 349.65 Z"/>
+                  <path d="M145.69 349.79 L141.31 338.02 L144.31 350.21 Z"/>
+                  </g>
+              </g>
+            </svg>
+
+            <!-- CORNER NODES — opaque white pills, occlude chain ends -->
+            <div class="node apex">
+              <div class="nlabel">Goal Planning</div>
+            </div>
+            <div class="node left">
+              <div class="nlabel">Portfolio<br>Analysis</div>
+            </div>
+            <div class="node right">
+              <div class="nlabel">Cashflow<br>Analysis</div>
+            </div>
+
+            <!-- BELOW TRIANGLE — distressed RED rubber STAMP "ADVICE / INCOMPLETE" -->
+            <div class="stamp">
+              <svg class="stamp-svg" viewBox="0 0 138 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="s4-grunge" x="-15%" y="-15%" width="130%" height="130%"
+                          filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.04 0.045"
+                                  numOctaves="2" seed="7" result="warp"/>
+                    <feDisplacementMap in="SourceGraphic" in2="warp"
+                                       scale="1.4" xChannelSelector="R" yChannelSelector="G"
+                                       result="eroded"/>
+                    <feTurbulence type="fractalNoise" baseFrequency="0.42"
+                                  numOctaves="1" seed="11" result="speck"/>
+                    <feColorMatrix in="speck" type="matrix"
+                                   values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 30 -12.3"
+                                   result="speckA"/>
+                    <feComposite in="eroded" in2="speckA" operator="in"/>
+                  </filter>
+                </defs>
+
+                <g filter="url(#s4-grunge)"
+                   fill="#d23a4d" stroke="#d23a4d">
+                  <rect x="6" y="6" width="126" height="58" rx="9" ry="9"
+                        fill="none" stroke-width="2.4"/>
+                  <text x="69" y="33" text-anchor="middle"
+                        font-family="'Inter', sans-serif" font-weight="800"
+                        font-size="20" letter-spacing="1.5"
+                        stroke="none">ADVICE</text>
+                  <text x="69" y="55" text-anchor="middle"
+                        font-family="'Inter', sans-serif" font-weight="800"
+                        font-size="20" letter-spacing="1"
+                        stroke="none">INCOMPLETE</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- ⑤ BOTTOM TAKEAWAY -->
+          <div class="verdict">
+            <div class="principle">Advice is incomplete when goals, cashflow, and portfolio are analysed separately.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

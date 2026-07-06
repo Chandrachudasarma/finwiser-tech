@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relay Node ③ — The Cashflow Reader</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 28px;
+    min-height: 100vh;
+  }
+
+  .label {
+    color: #666;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* ===== REVIEW STAGE: dark gradient field, column centered & enlarged ===== */
+  .stage {
+    width: 100%;
+    max-width: 1200px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 12px;
+    padding: 70px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* enlarge ~1.6x for easy review; the column itself stays 290px */
+  .scaler {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===== RELAY COLUMN — fixed 290 x ~560, lifts cleanly into the relay ===== */
+  .relay-col {
+    width: 290px;
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+  }
+
+  /* (1) avatar with the node number + RESOLVED green glow */
+  .avatar {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 14px;
+    color: #fff;
+    border: 2px solid var(--green);
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar .ring {
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,184,148,0.4);
+  }
+
+  /* (2) ROLE TITLE */
+  .role {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    margin-bottom: 8px;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  /* (3) the human QUESTION this node owns */
+  .question {
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0.8;
+    max-width: 248px;
+    margin-bottom: 16px;
+    font-weight: 400;
+    flex-shrink: 0;
+  }
+  .question .strong { font-weight: 700; opacity: 0.95; }
+
+  /* (4) MESS-AS-RESOLVED middle: ghost mess BEHIND, clean output IN FRONT */
+  .resolve {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  /* --- faint ghost of the EATEN mess: noisy multi-bank statement rows --- */
+  .ghost-mess {
+    position: absolute;
+    inset: -6px 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 4px;
+    pointer-events: none;
+    /* fades toward the centre so the resolved card reads as "what's left" */
+    -webkit-mask-image: radial-gradient(ellipse 120% 80% at 50% 50%, transparent 30%, #000 78%);
+            mask-image: radial-gradient(ellipse 120% 80% at 50% 50%, transparent 30%, #000 78%);
+    opacity: 0.5;
+    z-index: 1;
+  }
+  .stmt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 9px;
+    line-height: 1.1;
+    color: rgba(255,255,255,0.45);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .stmt .src {
+    flex-shrink: 0;
+    font-size: 7.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 1px 4px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.4);
+  }
+  .stmt .narr {
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stmt .amt { flex-shrink: 0; }
+  .stmt .amt.cr { color: rgba(0,184,148,0.55); }
+  .stmt .amt.dr { color: rgba(255,107,129,0.5); }
+  /* a couple flagged as noise: self-transfers that double-count */
+  .stmt.dim { color: rgba(255,255,255,0.28); }
+  .stmt.dim .src { opacity: 0.7; }
+  .stmt .flag {
+    flex-shrink: 0;
+    font-size: 7px;
+    font-style: italic;
+    color: rgba(255,107,129,0.5);
+  }
+
+  /* --- the RESOLVED OUTPUT: hero clean monthly cashflow --- */
+  .resolve-card {
+    position: relative;
+    z-index: 2;
+    width: 230px;
+    background: rgba(0,184,148,0.06);
+    border: 1px solid rgba(0,184,148,0.4);
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 0 30px rgba(0,184,148,0.28), 0 8px 26px rgba(0,0,0,0.45);
+    backdrop-filter: blur(2px);
+  }
+  .resolve-card .rc-title {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 11px;
+    text-align: left;
+  }
+  .calc-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: 'Courier Prime', Courier, monospace;
+    margin-bottom: 7px;
+  }
+  .calc-row .lab {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .calc-row .op {
+    font-weight: 700;
+    width: 12px;
+    display: inline-block;
+    text-align: center;
+    color: rgba(255,255,255,0.55);
+  }
+  .calc-row .val {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .calc-row .val.in  { color: #fff; }
+  .calc-row .val.out { color: var(--accent-soft); }
+
+  .rc-divider {
+    height: 1px;
+    background: rgba(0,184,148,0.3);
+    margin: 9px 0 10px;
+  }
+
+  /* the highlighted REAL INVESTABLE SURPLUS */
+  .surplus-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: 'Courier Prime', Courier, monospace;
+  }
+  .surplus-row .lab {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .surplus-row .lab .op { color: var(--green); }
+  .surplus-row .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 18px rgba(0,184,148,0.5);
+  }
+  .surplus-row .val .per {
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  /* green chip caption */
+  .chip {
+    margin: 12px auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 22px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid rgba(0,184,148,0.55);
+    background: rgba(0,184,148,0.12);
+    color: var(--green);
+    box-shadow: 0 0 18px rgba(0,184,148,0.3);
+  }
+  .chip .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(0,184,148,0.9);
+  }
+
+  /* (5) bottom caption: WHY THIS IS HARD */
+  .why {
+    width: 100%;
+    flex-shrink: 0;
+    text-align: left;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 12px;
+  }
+  .why .why-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .why p {
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* ===== RATIONALE PANEL ===== */
+  .rationale {
+    width: 100%;
+    max-width: 1200px;
+    padding: 32px 40px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .rationale .rat-head {
+    color: #f39c12;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .rat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .rat-grid .t { color: white; font-weight: 600; margin-bottom: 4px; }
+
+  /* ===== RESPONSIVE (mobile can shrink) ===== */
+  @media (max-width: 760px) {
+    .scaler { transform: scale(1.05); }
+    .stage { padding: 48px 16px; }
+    .rat-grid { grid-template-columns: 1fr; gap: 16px; }
+  }
+  @media (max-width: 420px) {
+    .scaler { transform: scale(0.92); }
+  }
+</style>
+</head>
+<body>
+
+<p class="label">Relay Node ③ — last frame (static)</p>
+
+<div class="stage">
+  <div class="scaler">
+
+    <!-- ===== RELAY COLUMN: 290 x 560 ===== -->
+    <div class="relay-col">
+
+      <!-- (1) avatar -->
+      <div class="avatar">3<span class="ring"></span></div>
+
+      <!-- (2) role -->
+      <div class="role">The Cashflow Reader</div>
+
+      <!-- (3) question -->
+      <div class="question">
+        Lifestyle <span class="strong">in</span> &minus; lifestyle <span class="strong">out</span>
+        = what you can <span class="strong">actually invest</span>.
+      </div>
+
+      <!-- (4) MESS-AS-RESOLVED -->
+      <div class="resolve">
+
+        <!-- faint ghost of the eaten mess: noisy multi-bank + card statement rows -->
+        <div class="ghost-mess" aria-hidden="true">
+          <div class="stmt"><span class="src">HDFC</span><span class="narr">ACH/SALARY CR/ACME PVT</span><span class="amt cr">+1,85,000</span></div>
+          <div class="stmt"><span class="src">HDFC</span><span class="narr">EMI/HDFC HOME LOAN/0042</span><span class="amt dr">-58,400</span></div>
+          <div class="stmt"><span class="src">ICICI</span><span class="narr">NEFT/RENT/L&amp;T REALTY</span><span class="amt dr">-34,000</span></div>
+          <div class="stmt dim"><span class="src">ICICI</span><span class="narr">IMPS/SELF TRANSFER/8801</span><span class="amt">-60,000</span><span class="flag">self</span></div>
+          <div class="stmt"><span class="src">AXIS&nbsp;CC</span><span class="narr">POS/AMAZON RETAIL IN</span><span class="amt dr">-7,240</span></div>
+          <div class="stmt"><span class="src">HDFC</span><span class="narr">UPI/SWIGGY/BUNDL TECH</span><span class="amt dr">-1,118</span></div>
+          <div class="stmt dim"><span class="src">SBI</span><span class="narr">IMPS/SELF TRANSFER/IN</span><span class="amt">+60,000</span><span class="flag">dup</span></div>
+          <div class="stmt"><span class="src">AXIS</span><span class="narr">ATM WDL/CASH/MG ROAD</span><span class="amt dr">-12,000</span></div>
+          <div class="stmt"><span class="src">SBI&nbsp;CC</span><span class="narr">POS/BIG BAZAAR/FBB</span><span class="amt dr">-4,860</span></div>
+          <div class="stmt"><span class="src">ICICI</span><span class="narr">ACH/SIP/AXIS BLUECHIP</span><span class="amt dr">-10,000</span></div>
+          <div class="stmt"><span class="src">HDFC</span><span class="narr">UPI/AIRTEL/RECHARGE</span><span class="amt dr">-799</span></div>
+          <div class="stmt"><span class="src">AXIS&nbsp;CC</span><span class="narr">POS/CULT FIT/ONE-OFF</span><span class="amt dr">-2,499</span></div>
+        </div>
+
+        <!-- the RESOLVED OUTPUT: clean monthly cashflow -->
+        <div class="resolve-card">
+          <div class="rc-title">Monthly cashflow · resolved</div>
+
+          <div class="calc-row">
+            <span class="lab"><span class="op">&nbsp;</span>Income in</span>
+            <span class="val in">&#8377;1,85,000</span>
+          </div>
+          <div class="calc-row">
+            <span class="lab"><span class="op">&minus;</span>Real expenses out</span>
+            <span class="val out">&#8377;1,32,000</span>
+          </div>
+
+          <div class="rc-divider"></div>
+
+          <div class="surplus-row">
+            <span class="lab"><span class="op">=</span>Real surplus</span>
+            <span class="val">&#8377;53,000<span class="per">/mo</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- green chip caption -->
+      <div class="chip"><span class="dot"></span>&#8377; real investable surplus</div>
+
+      <!-- (5) WHY THIS IS HARD -->
+      <div class="why">
+        <div class="why-label">Why this is hard</div>
+        <p>It takes reading every bank and card statement &mdash; thousands of noisy lines, self-transfers that double-count &mdash; to land on the one number that actually matters: what you can truly invest each month.</p>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== DESIGN RATIONALE ===== -->
+<div class="rationale">
+  <p class="rat-head">Design Rationale</p>
+  <div class="rat-grid">
+    <div>
+      <p class="t">Statements &rarr; one-number resolve</p>
+      <p>A dozen real, messy narrations across four banks and three cards sit as a faint ghost; the clean card eats them down to Income &minus; Expenses = surplus. You see the volume that was consumed, not just the tidy answer.</p>
+    </div>
+    <div>
+      <p class="t">"Real surplus, not a guess"</p>
+      <p>The hero number is what survives after rent, EMI, an existing SIP, and &mdash; critically &mdash; after stripping self-transfers that would otherwise double-count income. That's why it's the actual investable figure, the unlock for every later decision.</p>
+    </div>
+    <div>
+      <p class="t">Colour &amp; state system</p>
+      <p>Green = a hard leg resolved (this node's end-state). Grey ghost rows = the mess being consumed; pink flags mark the double-counting noise. The 290px column lifts straight into the four-node relay.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

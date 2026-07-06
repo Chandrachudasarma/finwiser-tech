@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real advice isn't an app. It's a team. — composed problem slide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  html, body { background: #111; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* ===================================================================== */
+  /* THE SLIDE — fixed 1280 x 720, 16:9, print-to-PDF clean landscape page */
+  /* ===================================================================== */
+  .slide {
+    width: 1280px;
+    height: 720px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 12px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 38px 40px 0;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+
+  /* ---- TOP: headline + sub-line ---- */
+  .slide-head {
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .slide-head h2 {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.1;
+  }
+  .slide-head .sub {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+  .slide-head .sub .hot { color: var(--accent-soft); font-weight: 600; }
+
+  /* ---- MIDDLE: the relay row, uniformly scaled to fit ---- */
+  .relay-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .relay-row {
+    display: flex;
+    align-items: flex-start;       /* tops aligned */
+    justify-content: center;
+    gap: 0;
+    transform: scale(0.84);
+    transform-origin: center center;
+  }
+  /* each lifted column keeps its raw 290 x 560 contract */
+  .node-col {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  /* static composed slide: drop the animated "mess" backgrounds — frozen, they
+     bleed around the cards and read as clutter. The answer + "why this is hard"
+     line already carry the 30-into-1 story here. */
+  #n1 .ghost-mess,
+  #n2 .mess,
+  #n3 .ghost-mess { display: none !important; }
+
+  /* "Why this is hard" is the crux of the whole slide — make it scannable.
+     Tight bullets, larger + brighter than the old paragraph. */
+  .why-list {
+    list-style: none;
+    margin: 5px 0 0;
+    padding: 0;
+    max-width: 250px;
+    text-align: left;
+  }
+
+  /* pin every "why" block to the SAME line across all 4 columns, below the
+     tallest answer card, so the crux baselines identically */
+  #n1 .why, #n2 .why, #n3 .why, #n4 .why {
+    position: absolute;
+    top: 400px;
+    left: 18px;
+    right: 18px;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    text-align: left;
+  }
+  .why-list li {
+    position: relative;
+    padding-left: 15px;
+    font-size: 12.5px;
+    line-height: 1.38;
+    font-weight: 500;
+    color: rgba(255,255,255,0.86);
+    margin-bottom: 6px;
+  }
+  .why-list li:last-child { margin-bottom: 0; }
+  .why-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-soft);
+    font-weight: 700;
+  }
+  /* node ④ stays deader: muted text, broken-red marker */
+  #n4 .why-list li { color: rgba(255,255,255,0.55); }
+  #n4 .why-list li::before { content: "✕"; font-size: 10px; color: var(--accent); }
+
+  /* ===================================================================== */
+  /* BROKEN CONNECTOR — the snapped handoff between adjacent columns       */
+  /* ===================================================================== */
+  .connector {
+    width: 86px;
+    height: 560px;            /* match column height, baton sits near top */
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  /* ---- VARIANT B — SNAPPED CHAIN LINK ----
+     Every app builds one link — but the chain is SNAPPED: two interlocking links
+     meet in the gap, cleanly broken with a small separation and a jagged crack,
+     the halves pulled slightly apart. SVG keeps the links crisp at 0.84 scale. */
+  .connector .chain {
+    position: absolute;
+    top: 200px;                  /* SVG canvas; links centre on the mid-line */
+    left: 0;
+    width: 86px;
+    height: 130px;
+    overflow: visible;
+    pointer-events: none;
+  }
+  /* small faint single-word label under the break */
+  .connector .brk-label {
+    position: absolute;
+    top: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(233,69,96,0.6);
+    white-space: nowrap;
+  }
+
+  /* the connector feeding ④ is the hardest, most final break:
+     larger snapped link, brighter red, loud 2-line label */
+  .connector.final .brk-label {
+    top: 312px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: 0.6px;
+    color: #ff6b81;
+    text-shadow: 0 0 12px rgba(233,69,96,0.7);
+    white-space: normal;
+    width: 112px;
+    text-align: center;
+  }
+
+  /* ---- BOTTOM: white slide bar + slide number ---- */
+  .slide-foot {
+    flex-shrink: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 26px;
+  }
+  .slide-bar {
+    background: #fff;
+    color: #1a1a2e;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 12px;
+    font-size: 17px;
+    padding: 14px 30px;
+    max-width: 1040px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  }
+  .slide-number {
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.30);
+    letter-spacing: 1px;
+  }
+
+  /* ===================================================================== */
+  /* ============  NODE ①  — The Goal-Setter (resolved/green)  ============ */
+  /* ===================================================================== */
+  #n1 { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  #n1 .avatar {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; margin-bottom: 15px;
+    position: relative; color: #fff;
+    border: 2px solid var(--green);
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+    flex-shrink: 0;
+  }
+  #n1 .avatar .ring { position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.4); }
+  #n1 .role { font-size: 17px; font-weight: 800; letter-spacing: 0.2px; color: var(--green); margin-bottom: 8px; }
+  #n1 .question { font-size: 13px; line-height: 1.45; opacity: 0.8; max-width: 235px; margin-bottom: 16px; font-weight: 400; }
+  #n1 .question .strong { font-weight: 700; opacity: 0.95; }
+  #n1 .work { width: 100%; flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 0; }
+  #n1 .ghost-mess {
+    position: absolute; inset: -10px -6px 18px; pointer-events: none; z-index: 1; opacity: 0.5;
+    -webkit-mask-image: radial-gradient(ellipse 82% 78% at 50% 46%, #000 50%, transparent 100%);
+            mask-image: radial-gradient(ellipse 82% 78% at 50% 46%, #000 50%, transparent 100%);
+  }
+  #n1 .ghost-mess .g {
+    position: absolute; font-size: 9px; font-weight: 600; padding: 3px 7px; border-radius: 11px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted); white-space: nowrap; transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  }
+  #n1 .ladder {
+    position: relative; z-index: 2; width: 100%; max-width: 252px; display: flex; flex-direction: column; gap: 7px;
+    padding: 13px 12px 12px; border-radius: 16px; background: rgba(0,184,148,0.05);
+    border: 1px solid rgba(0,184,148,0.25); box-shadow: 0 0 30px rgba(0,184,148,0.18);
+  }
+  #n1 .ladder .axis {
+    display: flex; align-items: center; font-size: 8px; font-weight: 700; letter-spacing: 0.7px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 3px; padding: 0 2px;
+  }
+  #n1 .ladder .axis .arrow { flex: 1; height: 1px; margin: 0 8px; background: linear-gradient(90deg, rgba(233,69,96,0.5), rgba(108,200,255,0.45)); }
+  #n1 .rung {
+    display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 10px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); text-align: left;
+  }
+  #n1 .rung .rank {
+    flex-shrink: 0; width: 17px; height: 17px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;
+    background: rgba(0,184,148,0.16); color: var(--green); border: 1px solid rgba(0,184,148,0.4);
+  }
+  #n1 .rung .goal { flex: 1; font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.9); line-height: 1.2; }
+  #n1 .rung .horizon {
+    flex-shrink: 0; font-family: 'Courier Prime', Courier, monospace; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 9px; white-space: nowrap;
+  }
+  #n1 .rung .horizon.near { color: var(--accent-soft); background: rgba(233,69,96,0.12); border: 1px solid rgba(233,69,96,0.35); }
+  #n1 .rung .horizon.mid { color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); }
+  #n1 .rung .horizon.far { color: #6cc8ff; background: rgba(108,200,255,0.1); border: 1px solid rgba(108,200,255,0.34); }
+  #n1 .cap-chip {
+    align-self: center; margin-top: 5px; display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 22px; font-size: 11.5px; font-weight: 700;
+    border: 1px solid rgba(0,184,148,0.55); background: rgba(0,184,148,0.12); color: var(--green);
+    box-shadow: 0 0 22px rgba(0,184,148,0.32);
+  }
+  #n1 .cap-chip .tick { font-size: 11px; }
+  #n1 .why { width: 100%; margin-top: 14px; padding-top: 13px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  #n1 .why .why-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  #n1 .why p { font-size: 11px; line-height: 1.5; opacity: 0.7; max-width: 270px; margin: 0 auto; }
+
+  /* ===================================================================== */
+  /* ========  NODE ②  — The Portfolio Analyst (resolved/green)  ========= */
+  /* ===================================================================== */
+  #n2 { display: flex; flex-direction: column; align-items: center; text-align: center; color: #fff; }
+  #n2 .avatar {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; margin-bottom: 14px; color: #fff;
+    border: 2px solid var(--green); background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5); position: relative; flex-shrink: 0;
+  }
+  #n2 .avatar .ring { position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.4); }
+  #n2 .role { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 8px; color: var(--green); line-height: 1.2; }
+  #n2 .question { font-size: 13px; line-height: 1.45; opacity: 0.8; max-width: 250px; margin-bottom: 16px; font-weight: 400; }
+  #n2 .question .strong { font-weight: 700; opacity: 0.98; }
+  #n2 .work { width: 100%; flex: 1; position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; }
+  #n2 .mess { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  #n2 .mess .m {
+    position: absolute; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 11px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.22); white-space: nowrap; transform: translate(-50%,-50%); filter: blur(0.4px);
+  }
+  #n2 .mess::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 62% 56% at 50% 50%, rgba(22,33,62,0.92) 0%, rgba(22,33,62,0.62) 45%, rgba(22,33,62,0) 78%);
+    pointer-events: none;
+  }
+  #n2 .truth {
+    position: relative; z-index: 2; width: 246px; background: rgba(0,184,148,0.05);
+    border: 1px solid rgba(0,184,148,0.30); border-radius: 14px; padding: 14px 14px 13px;
+    box-shadow: 0 0 30px rgba(0,184,148,0.18);
+  }
+  #n2 .truth-row { display: flex; align-items: baseline; justify-content: space-between; padding: 7px 0; }
+  #n2 .truth-row + .truth-row { border-top: 1px solid rgba(255,255,255,0.07); }
+  #n2 .tr-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); }
+  #n2 .tr-val { font-family: 'Courier Prime', Courier, monospace; font-size: 16px; font-weight: 700; color: #fff; line-height: 1; }
+  #n2 .tr-val.green { color: var(--green); }
+  #n2 .truth-row.net .tr-label { color: rgba(255,255,255,0.7); }
+  #n2 .truth-row.net .tr-val { font-size: 18px; }
+  #n2 .protect { margin-top: 9px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.14); text-align: left; }
+  #n2 .protect .p-label { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 4px; }
+  #n2 .protect .p-line { font-family: 'Courier Prime', Courier, monospace; font-size: 12px; line-height: 1.4; color: rgba(255,255,255,0.85); }
+  #n2 .protect .gap { color: var(--accent-soft); font-weight: 700; }
+  #n2 .protect .flag {
+    display: inline-block; margin-left: 2px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--accent-soft); border: 1px solid rgba(233,69,96,0.45);
+    background: rgba(233,69,96,0.10); padding: 1px 6px; border-radius: 10px; vertical-align: middle;
+  }
+  #n2 .chip {
+    display: inline-flex; align-items: center; gap: 6px; margin: 12px auto 0; padding: 7px 14px;
+    border-radius: 22px; font-size: 11.5px; font-weight: 700; line-height: 1.2;
+    border: 1px solid rgba(0,184,148,0.55); background: rgba(0,184,148,0.12); color: var(--green);
+    box-shadow: 0 0 22px rgba(0,184,148,0.32);
+  }
+  #n2 .chip::before { content: '✓'; font-weight: 800; }
+  #n2 .why { margin-top: 14px; width: 100%; flex-shrink: 0; }
+  #n2 .why .why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 5px; }
+  #n2 .why .why-text { font-size: 11.5px; line-height: 1.5; color: rgba(255,255,255,0.6); max-width: 270px; margin: 0 auto; }
+
+  /* ===================================================================== */
+  /* ========  NODE ③  — The Cashflow Reader (resolved/green)  ========== */
+  /* ===================================================================== */
+  #n3 { display: flex; flex-direction: column; align-items: center; text-align: center; color: #fff; }
+  #n3 .avatar {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; margin-bottom: 14px; color: #fff;
+    border: 2px solid var(--green); background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5); position: relative; flex-shrink: 0;
+  }
+  #n3 .avatar .ring { position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.4); }
+  #n3 .role { font-size: 17px; font-weight: 800; letter-spacing: 0.2px; margin-bottom: 8px; color: var(--green); flex-shrink: 0; }
+  #n3 .question { font-size: 13px; line-height: 1.45; opacity: 0.8; max-width: 248px; margin-bottom: 16px; font-weight: 400; flex-shrink: 0; }
+  #n3 .question .strong { font-weight: 700; opacity: 0.95; }
+  #n3 .resolve { position: relative; width: 100%; flex: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  #n3 .ghost-mess {
+    position: absolute; inset: -6px 4px; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    padding: 6px 4px; pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse 120% 80% at 50% 50%, transparent 30%, #000 78%);
+            mask-image: radial-gradient(ellipse 120% 80% at 50% 50%, transparent 30%, #000 78%);
+    opacity: 0.5; z-index: 1;
+  }
+  #n3 .stmt {
+    display: flex; align-items: center; gap: 6px; font-family: 'Courier Prime', Courier, monospace;
+    font-size: 9px; line-height: 1.1; color: rgba(255,255,255,0.45); white-space: nowrap; overflow: hidden;
+  }
+  #n3 .stmt .src {
+    flex-shrink: 0; font-size: 7.5px; font-weight: 700; letter-spacing: 0.3px; padding: 1px 4px; border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.4);
+  }
+  #n3 .stmt .narr { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; }
+  #n3 .stmt .amt { flex-shrink: 0; }
+  #n3 .stmt .amt.cr { color: rgba(0,184,148,0.55); }
+  #n3 .stmt .amt.dr { color: rgba(255,107,129,0.5); }
+  #n3 .stmt.dim { color: rgba(255,255,255,0.28); }
+  #n3 .stmt.dim .src { opacity: 0.7; }
+  #n3 .stmt .flag { flex-shrink: 0; font-size: 7px; font-style: italic; color: rgba(255,107,129,0.5); }
+  #n3 .resolve-card {
+    position: relative; z-index: 2; width: 230px; background: rgba(0,184,148,0.06);
+    border: 1px solid rgba(0,184,148,0.4); border-radius: 14px; padding: 16px 16px 14px;
+    box-shadow: 0 0 30px rgba(0,184,148,0.28), 0 8px 26px rgba(0,0,0,0.45); backdrop-filter: blur(2px);
+  }
+  #n3 .resolve-card .rc-title {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;
+    color: rgba(255,255,255,0.5); margin-bottom: 11px; text-align: left;
+  }
+  #n3 .calc-row { display: flex; align-items: baseline; justify-content: space-between; font-family: 'Courier Prime', Courier, monospace; margin-bottom: 7px; }
+  #n3 .calc-row .lab { font-size: 11px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px; }
+  #n3 .calc-row .op { font-weight: 700; width: 12px; display: inline-block; text-align: center; color: rgba(255,255,255,0.55); }
+  #n3 .calc-row .val { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; }
+  #n3 .calc-row .val.in { color: #fff; }
+  #n3 .calc-row .val.out { color: var(--accent-soft); }
+  #n3 .rc-divider { height: 1px; background: rgba(0,184,148,0.3); margin: 9px 0 10px; }
+  #n3 .surplus-row { display: flex; align-items: baseline; justify-content: space-between; font-family: 'Courier Prime', Courier, monospace; }
+  #n3 .surplus-row .lab { font-size: 11px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 6px; }
+  #n3 .surplus-row .lab .op { color: var(--green); }
+  #n3 .surplus-row .val {
+    font-family: 'Inter', sans-serif; font-size: 21px; font-weight: 800; color: var(--green);
+    letter-spacing: -0.5px; text-shadow: 0 0 18px rgba(0,184,148,0.5);
+  }
+  #n3 .surplus-row .val .per { font-size: 10px; font-weight: 600; opacity: 0.7; }
+  #n3 .chip {
+    margin: 12px auto 0; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+    border-radius: 22px; font-size: 11px; font-weight: 700; border: 1px solid rgba(0,184,148,0.55);
+    background: rgba(0,184,148,0.12); color: var(--green); box-shadow: 0 0 18px rgba(0,184,148,0.3);
+  }
+  #n3 .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(0,184,148,0.9); }
+  #n3 .why { width: 100%; flex-shrink: 0; text-align: left; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
+  #n3 .why .why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 5px; }
+  #n3 .why p { font-size: 11.5px; line-height: 1.5; color: rgba(255,255,255,0.7); }
+
+  /* ===================================================================== */
+  /* ====  NODE ④  — The Optimiser → Steps (DEAD / never delivered)  ===== */
+  /* ===================================================================== */
+  #n4 { display: flex; flex-direction: column; align-items: center; text-align: center; color: white; filter: saturate(0.8); }
+  #n4 .avatar {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 21px; font-weight: 800; margin-bottom: 14px; position: relative;
+    border: 2px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.30); box-shadow: none; opacity: 0.55;
+  }
+  #n4 .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: #16213e; border: 1px solid rgba(233,69,96,0.45);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--accent-soft);
+  }
+  #n4 .role { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 8px; color: rgba(255,255,255,0.42); min-height: 20px; }
+  #n4 .question { font-size: 13px; line-height: 1.45; color: rgba(255,255,255,0.40); max-width: 240px; margin-bottom: 12px; font-weight: 400; }
+  #n4 .question .strong { font-weight: 700; color: rgba(255,255,255,0.55); }
+  #n4 .deps { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.32); }
+  #n4 .deps .dpill {
+    width: 19px; height: 19px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.30);
+    background: rgba(0,184,148,0.06); color: rgba(0,184,148,0.55); display: inline-flex; align-items: center; justify-content: center;
+  }
+  #n4 .deps .arrow { color: var(--accent-soft); font-weight: 700; letter-spacing: 1px; }
+  #n4 .deps .arrow.broken { color: var(--accent); }
+  #n4 .work { width: 100%; flex: 1; display: flex; align-items: center; justify-content: center; position: relative; min-height: 200px; padding: 4px 0; }
+  #n4 .checklist {
+    width: 100%; max-width: 250px; text-align: left; border-radius: 12px; padding: 14px 14px 13px; position: relative;
+    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); box-shadow: none;
+  }
+  #n4 .checklist .cl-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(255,255,255,0.40); margin-bottom: 11px; }
+  #n4 .checklist .cl-item { font-family: 'Courier Prime', Courier, monospace; font-size: 11.5px; line-height: 1.4; color: rgba(255,255,255,0.22); margin-bottom: 10px; display: flex; gap: 8px; }
+  #n4 .checklist .cl-item:last-child { margin-bottom: 0; }
+  #n4 .checklist .tick {
+    flex-shrink: 0; width: 12px; height: 12px; margin-top: 1px;
+    border: 1.4px solid rgba(255,255,255,0.20); border-radius: 3px; display: inline-block;
+  }
+  #n4 .checklist .cl-item b { color: rgba(255,255,255,0.32); font-weight: 700; }
+  #n4 .checklist .cl-item .blank { color: rgba(255,107,129,0.45); font-weight: 700; letter-spacing: 1px; }
+  #n4 .tension { margin-top: 11px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12); font-size: 10px; line-height: 1.4; color: rgba(255,255,255,0.30); font-style: italic; }
+  #n4 .tension .tg { color: rgba(255,107,129,0.55); font-style: normal; font-weight: 700; }
+  #n4 .stamp {
+    position: absolute; left: 50%; top: 56%; transform: translate(-50%,-50%) rotate(-9deg); white-space: nowrap;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.4px; color: var(--accent-soft);
+    padding: 6px 14px; border: 1.6px solid rgba(233,69,96,0.5); border-radius: 6px;
+    background: rgba(26,33,62,0.78); box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+  }
+  #n4 .breakline {
+    position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    color: rgba(233,69,96,0.6); background: #16213e; padding: 2px 9px; border-radius: 10px;
+    border: 1px solid rgba(233,69,96,0.3);
+  }
+  #n4 .why { width: 100%; max-width: 250px; margin-top: 6px; text-align: left; }
+  #n4 .why .why-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; color: rgba(255,255,255,0.40); margin-bottom: 6px; }
+  #n4 .why .why-text { font-size: 11.5px; line-height: 1.5; color: rgba(255,255,255,0.50); }
+  #n4 .why .why-text .hot { color: var(--accent-soft); font-weight: 600; }
+
+  /* ===================================================================== */
+  /* PRINT — exactly one 1280 x 720 landscape page, slide at full bleed     */
+  /* ===================================================================== */
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    html, body { background: #fff; width: 1280px; height: 720px; }
+    body { padding: 0; display: block; }
+    .slide { border-radius: 0; box-shadow: none; width: 1280px; height: 720px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="slide">
+
+    <!-- ===== TOP: headline + sub-line ===== -->
+    <div class="slide-head">
+      <h2>Real advice isn't an app. It's a team.</h2>
+      <p class="sub">The wealthy hire that team. <span class="hot">You can't.</span></p>
+    </div>
+
+    <!-- ===== MIDDLE: four columns + broken connectors (scaled to fit) ===== -->
+    <div class="relay-wrap">
+      <div class="relay-row">
+
+        <!-- ===== NODE ① — The Goal-Setter ===== -->
+        <div class="node-col">
+          <div id="n1">
+            <div class="avatar">1<span class="ring"></span></div>
+            <div class="role">The Goal-Setter</div>
+            <div class="question">What matters most — <span class="strong">and by when?</span></div>
+            <div class="work">
+              <div class="ghost-mess">
+                <span class="g" style="left:18%;  top:6%;  --rot:-7deg">Emergency fund · now</span>
+                <span class="g" style="left:75%;  top:11%; --rot:6deg">New car · 2 yr</span>
+                <span class="g" style="left:25%;  top:29%; --rot:4deg">Vacation · 1 yr</span>
+                <span class="g" style="left:79%;  top:35%; --rot:-5deg">Wedding · 3 yr</span>
+                <span class="g" style="left:17%;  top:55%; --rot:8deg">Home · 5 yr</span>
+                <span class="g" style="left:77%;  top:60%; --rot:-6deg">Parents' healthcare · ongoing</span>
+                <span class="g" style="left:31%;  top:82%; --rot:-4deg">Kids' education · 15 yr</span>
+                <span class="g" style="left:70%;  top:88%; --rot:7deg">Retirement · 25 yr</span>
+              </div>
+              <div class="ladder">
+                <div class="axis"><span>Near</span><span class="arrow"></span><span>Far</span></div>
+                <div class="rung"><span class="rank">1</span><span class="goal">Emergency fund</span><span class="horizon near">now</span></div>
+                <div class="rung"><span class="rank">2</span><span class="goal">New car</span><span class="horizon near">2 yr</span></div>
+                <div class="rung"><span class="rank">3</span><span class="goal">Kids' education</span><span class="horizon mid">15 yr</span></div>
+                <div class="rung"><span class="rank">4</span><span class="goal">Retirement</span><span class="horizon far">25 yr</span></div>
+              </div>
+              <div class="cap-chip"><span class="tick">✓</span>Priorities + timelines</div>
+            </div>
+            <div class="why">
+              <div class="why-label">Why this is hard</div>
+              <ul class="why-list">
+                <li>People can't rank their own goals</li>
+                <li>No real dates or amounts on them</li>
+                <li>One pot can't serve a 2-yr <em>and</em> a 20-yr goal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CONNECTOR ①→② (snapped chain link) ===== -->
+        <div class="connector">
+          <svg class="chain" viewBox="0 0 86 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="bGlowMid" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="1.6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- TWO interlocking oblong links meeting at the mid-line (y=50 => page 250),
+                 SNAPPED: clean break with a small separation + jagged crack, halves pulled apart.
+                 Left link is a C open on its right; right link a C open on its left. -->
+            <g filter="url(#bGlowMid)" stroke="#ff6b81" stroke-width="3" stroke-linecap="round" opacity="0.85">
+              <!-- left link (pulled up-left): closed left end, open broken right end -->
+              <path d="M40 41 h-16 a9 9 0 0 0 -9 9 a9 9 0 0 0 9 9 h16"/>
+              <!-- right link (pulled down-right), interlocking through the left one: open broken left end, closed right end -->
+              <path d="M46 52 h16 a9 9 0 0 1 9 9 a9 9 0 0 1 -9 9 h-16"/>
+            </g>
+            <!-- jagged crack + red break accents at the snapped ends -->
+            <g stroke="#e94560" stroke-width="2" stroke-linecap="round" filter="url(#bGlowMid)">
+              <path d="M40 41 l4 4 l-3 3 l4 3"/>
+              <path d="M46 70 l-4 -4 l3 -3 l-4 -3"/>
+            </g>
+          </svg>
+          <div class="brk-label">broken</div>
+        </div>
+
+        <!-- ===== NODE ② — The Portfolio Analyst ===== -->
+        <div class="node-col">
+          <div id="n2">
+            <div class="avatar">2<span class="ring"></span></div>
+            <div class="role">The Portfolio Analyst</div>
+            <div class="question">What you <span class="strong">OWN</span>, what you <span class="strong">OWE</span>, what <span class="strong">PROTECTS</span> you.</div>
+            <div class="work">
+              <div class="mess">
+                <div class="m" style="left:12%; top:10%;">MF</div>
+                <div class="m" style="left:42%; top:7%;">Stocks</div>
+                <div class="m" style="left:74%; top:12%;">EPF</div>
+                <div class="m" style="left:91%; top:28%;">PPF</div>
+                <div class="m" style="left:8%;  top:34%;">NPS</div>
+                <div class="m" style="left:33%; top:30%;">FD</div>
+                <div class="m" style="left:63%; top:26%;">RD</div>
+                <div class="m" style="left:88%; top:46%;">Gold</div>
+                <div class="m" style="left:14%; top:52%;">ULIP</div>
+                <div class="m" style="left:40%; top:50%;">RSU/ESOP</div>
+                <div class="m" style="left:70%; top:52%;">Term cover</div>
+                <div class="m" style="left:90%; top:66%;">Health cover</div>
+                <div class="m" style="left:10%; top:76%;">Home loan</div>
+                <div class="m" style="left:34%; top:80%;">Car loan</div>
+                <div class="m" style="left:60%; top:84%;">Personal loan</div>
+                <div class="m" style="left:84%; top:86%;">Credit-card debt</div>
+              </div>
+              <div class="truth">
+                <div class="truth-row"><span class="tr-label">Own · assets</span><span class="tr-val">₹42.6L</span></div>
+                <div class="truth-row"><span class="tr-label">Owe · liabilities</span><span class="tr-val">₹18.2L</span></div>
+                <div class="truth-row net"><span class="tr-label">Net worth</span><span class="tr-val green">₹24.4L</span></div>
+                <div class="protect">
+                  <div class="p-label">Protect · cover vs need</div>
+                  <div class="p-line">Term cover ₹50L — <span class="gap">gap vs need ₹1.2Cr</span> <span class="flag">gap</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="chip">One net-worth + protection truth</div>
+            <div class="why">
+              <div class="why-label">Why this is hard</div>
+              <ul class="why-list">
+                <li>Money scattered across 30+ silos</li>
+                <li>No single source of truth</li>
+                <li>Never see real net worth — or if they're protected</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CONNECTOR ②→③ (snapped chain link) ===== -->
+        <div class="connector">
+          <svg class="chain" viewBox="0 0 86 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="bGlowMid2" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="1.6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <g filter="url(#bGlowMid2)" stroke="#ff6b81" stroke-width="3" stroke-linecap="round" opacity="0.85">
+              <path d="M40 41 h-16 a9 9 0 0 0 -9 9 a9 9 0 0 0 9 9 h16"/>
+              <path d="M46 52 h16 a9 9 0 0 1 9 9 a9 9 0 0 1 -9 9 h-16"/>
+            </g>
+            <g stroke="#e94560" stroke-width="2" stroke-linecap="round" filter="url(#bGlowMid2)">
+              <path d="M40 41 l4 4 l-3 3 l4 3"/>
+              <path d="M46 70 l-4 -4 l3 -3 l-4 -3"/>
+            </g>
+          </svg>
+          <div class="brk-label">broken</div>
+        </div>
+
+        <!-- ===== NODE ③ — The Cashflow Reader ===== -->
+        <div class="node-col">
+          <div id="n3">
+            <div class="avatar">3<span class="ring"></span></div>
+            <div class="role">The Cashflow Reader</div>
+            <div class="question">Lifestyle <span class="strong">in</span> &minus; lifestyle <span class="strong">out</span> = what you can <span class="strong">actually invest</span>.</div>
+            <div class="resolve">
+              <div class="ghost-mess" aria-hidden="true">
+                <div class="stmt"><span class="src">HDFC</span><span class="narr">ACH/SALARY CR/ACME PVT</span><span class="amt cr">+1,85,000</span></div>
+                <div class="stmt"><span class="src">HDFC</span><span class="narr">EMI/HDFC HOME LOAN/0042</span><span class="amt dr">-58,400</span></div>
+                <div class="stmt"><span class="src">ICICI</span><span class="narr">NEFT/RENT/L&amp;T REALTY</span><span class="amt dr">-34,000</span></div>
+                <div class="stmt dim"><span class="src">ICICI</span><span class="narr">IMPS/SELF TRANSFER/8801</span><span class="amt">-60,000</span><span class="flag">self</span></div>
+                <div class="stmt"><span class="src">AXIS&nbsp;CC</span><span class="narr">POS/AMAZON RETAIL IN</span><span class="amt dr">-7,240</span></div>
+                <div class="stmt"><span class="src">HDFC</span><span class="narr">UPI/SWIGGY/BUNDL TECH</span><span class="amt dr">-1,118</span></div>
+                <div class="stmt dim"><span class="src">SBI</span><span class="narr">IMPS/SELF TRANSFER/IN</span><span class="amt">+60,000</span><span class="flag">dup</span></div>
+                <div class="stmt"><span class="src">AXIS</span><span class="narr">ATM WDL/CASH/MG ROAD</span><span class="amt dr">-12,000</span></div>
+                <div class="stmt"><span class="src">SBI&nbsp;CC</span><span class="narr">POS/BIG BAZAAR/FBB</span><span class="amt dr">-4,860</span></div>
+                <div class="stmt"><span class="src">ICICI</span><span class="narr">ACH/SIP/AXIS BLUECHIP</span><span class="amt dr">-10,000</span></div>
+                <div class="stmt"><span class="src">HDFC</span><span class="narr">UPI/AIRTEL/RECHARGE</span><span class="amt dr">-799</span></div>
+                <div class="stmt"><span class="src">AXIS&nbsp;CC</span><span class="narr">POS/CULT FIT/ONE-OFF</span><span class="amt dr">-2,499</span></div>
+              </div>
+              <div class="resolve-card">
+                <div class="rc-title">Monthly cashflow · resolved</div>
+                <div class="calc-row"><span class="lab"><span class="op">&nbsp;</span>Income in</span><span class="val in">&#8377;1,85,000</span></div>
+                <div class="calc-row"><span class="lab"><span class="op">&minus;</span>Real expenses out</span><span class="val out">&#8377;1,32,000</span></div>
+                <div class="rc-divider"></div>
+                <div class="surplus-row"><span class="lab"><span class="op">=</span>Real surplus</span><span class="val">&#8377;53,000<span class="per">/mo</span></span></div>
+              </div>
+            </div>
+            <div class="chip"><span class="dot"></span>&#8377; real investable surplus</div>
+            <div class="why">
+              <div class="why-label">Why this is hard</div>
+              <ul class="why-list">
+                <li>1,000s of noisy lines, every bank + card</li>
+                <li>Self-transfers double-count</li>
+                <li>One number to find: real monthly surplus</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CONNECTOR ③→④ (snapped chain link — the hardest, most final) ===== -->
+        <div class="connector final">
+          <svg class="chain" viewBox="0 0 86 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="bGlowFinal" x="-70%" y="-70%" width="240%" height="240%">
+                <feGaussianBlur stdDeviation="2.6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- larger snapped link, brighter red, halves pulled FURTHER apart -->
+            <g filter="url(#bGlowFinal)" stroke="#ff5470" stroke-width="3.6" stroke-linecap="round">
+              <!-- left half, pulled up-left -->
+              <path d="M38 36 h-15 a11 11 0 0 0 -11 11 a11 11 0 0 0 11 11 h13"/>
+              <!-- right half, pulled down-right -->
+              <path d="M48 56 h15 a11 11 0 0 1 11 11 a11 11 0 0 1 -11 11 h-13"/>
+            </g>
+            <!-- bigger jagged crack + bright red break accents -->
+            <g stroke="#e94560" stroke-width="2.6" stroke-linecap="round" filter="url(#bGlowFinal)">
+              <path d="M36 36 l5 5 l-4 4 l5 4"/>
+              <path d="M50 78 l-5 -5 l4 -4 l-5 -4"/>
+            </g>
+          </svg>
+          <div class="brk-label">ADVICE IS<br>NEVER COMPLETE</div>
+        </div>
+
+        <!-- ===== NODE ④ — The Optimiser → Steps (DEAD) ===== -->
+        <div class="node-col">
+          <div id="n4">
+            <div class="avatar">4<span class="lock">🔒</span></div>
+            <div class="role">The Optimiser → Steps</div>
+            <div class="question">Optimise each goal — and hand you the <span class="strong">exact steps.</span></div>
+            <div class="deps">
+              <span class="dpill">1</span><span class="dpill">2</span><span class="dpill">3</span>
+              <span class="arrow broken">⤍ ✕</span><span>④ never fires</span>
+            </div>
+            <div class="work">
+              <div class="checklist">
+                <div class="breakline">handoff lost</div>
+                <div class="cl-title">Your next 3 actions</div>
+                <div class="cl-item"><span class="tick"></span><span>Move <span class="blank">₹__</span> idle savings → liquid fund</span></div>
+                <div class="cl-item"><span class="tick"></span><span>Top up term cover by <span class="blank">₹__</span></span></div>
+                <div class="cl-item"><span class="tick"></span><span>Start <span class="blank">₹__</span>/mo SIP for the <b>20-yr</b> goal</span></div>
+                <div class="tension">One portfolio can't serve a <span class="tg">2-yr</span> and a <span class="tg">20-yr</span> goal at once.</div>
+                <div class="stamp">🔒 — never delivered —</div>
+              </div>
+            </div>
+            <div class="why">
+              <div class="why-label">Why this is hard</div>
+              <ul class="why-list">
+                <li>The only step that changes your life</li>
+                <li>Needs goals + holdings + surplus — connected</li>
+                <li>Drop one link → the advice never arrives</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== BOTTOM: white bar + slide number ===== -->
+    <div class="slide-foot">
+      <div class="slide-bar">Every app builds one link. The baton never finishes — so no one actually advises you.</div>
+    </div>
+    <div class="slide-number">01</div>
+
+  </div>
+
+</body>
+</html>

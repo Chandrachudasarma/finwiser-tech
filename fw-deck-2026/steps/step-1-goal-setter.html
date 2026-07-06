@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step ① The Goal-Setter — relay column (last frame)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #111;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px;
+    gap: 40px;
+  }
+
+  .label {
+    color: #666;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+  /* ===== STAGE: dark gradient backdrop, column enlarged for review ===== */
+  .stage {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 16px;
+    padding: 90px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* enlarge the whole column ~1.6x for easy review; the column itself stays 290px */
+  .scaler {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===== RELAY COLUMN — fixed 290 x 560 contract ===== */
+  .column {
+    width: 290px;
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  /* (1) avatar — 54px, holds node number, RESOLVED green glow */
+  .avatar {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 15px;
+    position: relative;
+    color: #fff;
+    border: 2px solid var(--green);
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+    flex-shrink: 0;
+  }
+  .avatar .ring {
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,184,148,0.4);
+  }
+
+  /* (2) role title — weight 800, ~17px */
+  .role {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  /* (3) human question */
+  .question {
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0.8;
+    max-width: 235px;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .question .strong { font-weight: 700; opacity: 0.95; }
+
+  /* (4) mess-as-resolved zone: ghost mess behind, clean ladder in front */
+  .work {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  /* ----- ghost mess cloud (the eaten, un-ordered goals) ----- */
+  .ghost-mess {
+    position: absolute;
+    inset: -10px -6px 18px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    -webkit-mask-image: radial-gradient(ellipse 82% 78% at 50% 46%, #000 50%, transparent 100%);
+            mask-image: radial-gradient(ellipse 82% 78% at 50% 46%, #000 50%, transparent 100%);
+  }
+  .ghost-mess .g {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 11px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    white-space: nowrap;
+    transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  }
+
+  /* ----- the hero: clean prioritized goal ladder ----- */
+  .ladder {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 252px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 13px 12px 12px;
+    border-radius: 16px;
+    background: rgba(0,184,148,0.05);
+    border: 1px solid rgba(0,184,148,0.25);
+    box-shadow: 0 0 30px rgba(0,184,148,0.18);
+  }
+
+  /* axis cue: the long pull from near-term to far-term */
+  .ladder .axis {
+    display: flex;
+    align-items: center;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 3px;
+    padding: 0 2px;
+  }
+  .ladder .axis .arrow {
+    flex: 1; height: 1px; margin: 0 8px;
+    background: linear-gradient(90deg, rgba(233,69,96,0.5), rgba(108,200,255,0.45));
+  }
+
+  .rung {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 9px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    text-align: left;
+  }
+  .rung .rank {
+    flex-shrink: 0;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800;
+    background: rgba(0,184,148,0.16);
+    color: var(--green);
+    border: 1px solid rgba(0,184,148,0.4);
+  }
+  .rung .goal {
+    flex: 1;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.2;
+  }
+  .rung .horizon {
+    flex-shrink: 0;
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 9px;
+    white-space: nowrap;
+  }
+  /* near-term horizon = warm/active pull; far-term = cool/long pull —
+     opposite ends so a 2-yr and a 25-yr goal read as pulling apart */
+  .rung .horizon.near {
+    color: var(--accent-soft);
+    background: rgba(233,69,96,0.12);
+    border: 1px solid rgba(233,69,96,0.35);
+  }
+  .rung .horizon.mid {
+    color: rgba(255,255,255,0.72);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .rung .horizon.far {
+    color: #6cc8ff;
+    background: rgba(108,200,255,0.1);
+    border: 1px solid rgba(108,200,255,0.34);
+  }
+
+  /* green cap chip */
+  .cap-chip {
+    align-self: center;
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 22px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1px solid rgba(0,184,148,0.55);
+    background: rgba(0,184,148,0.12);
+    color: var(--green);
+    box-shadow: 0 0 22px rgba(0,184,148,0.32);
+  }
+  .cap-chip .tick { font-size: 11px; }
+
+  /* (5) bottom caption — WHY THIS IS HARD */
+  .why {
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  .why .why-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .why p {
+    font-size: 11px;
+    line-height: 1.5;
+    opacity: 0.7;
+    max-width: 270px;
+    margin: 0 auto;
+  }
+
+  /* ===== RATIONALE PANEL ===== */
+  .rationale {
+    width: 100%;
+    max-width: 1000px;
+    padding: 32px 40px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .rationale .rat-head {
+    color: #f39c12;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .rat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .rat-grid .t { color: white; font-weight: 600; margin-bottom: 4px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 760px) {
+    .stage { padding: 48px 24px; }
+    .scaler { transform: scale(1.05); }
+    .rat-grid { grid-template-columns: 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<p class="label">Relay Node ① — The Goal-Setter · last frame (resolved)</p>
+
+<!-- ===== STAGE ===== -->
+<div class="stage">
+  <div class="scaler">
+
+    <!-- ===== 290px RELAY COLUMN ===== -->
+    <div class="column">
+
+      <!-- (1) avatar -->
+      <div class="avatar">1<span class="ring"></span></div>
+
+      <!-- (2) role -->
+      <div class="role">The Goal-Setter</div>
+
+      <!-- (3) human question -->
+      <div class="question">What matters most — <span class="strong">and by when?</span></div>
+
+      <!-- (4) mess-as-resolved -->
+      <div class="work">
+
+        <!-- faint ghost of the consumed mess: 8 tangled, competing goals with no order -->
+        <div class="ghost-mess">
+          <span class="g" style="left:18%;  top:6%;  --rot:-7deg">Emergency fund · now</span>
+          <span class="g" style="left:75%;  top:11%; --rot:6deg">New car · 2 yr</span>
+          <span class="g" style="left:25%;  top:29%; --rot:4deg">Vacation · 1 yr</span>
+          <span class="g" style="left:79%;  top:35%; --rot:-5deg">Wedding · 3 yr</span>
+          <span class="g" style="left:17%;  top:55%; --rot:8deg">Home · 5 yr</span>
+          <span class="g" style="left:77%;  top:60%; --rot:-6deg">Parents' healthcare · ongoing</span>
+          <span class="g" style="left:31%;  top:82%; --rot:-4deg">Kids' education · 15 yr</span>
+          <span class="g" style="left:70%;  top:88%; --rot:7deg">Retirement · 25 yr</span>
+        </div>
+
+        <!-- the hero: clean prioritized ladder -->
+        <div class="ladder">
+          <div class="axis">
+            <span>Near</span><span class="arrow"></span><span>Far</span>
+          </div>
+
+          <div class="rung">
+            <span class="rank">1</span>
+            <span class="goal">Emergency fund</span>
+            <span class="horizon near">now</span>
+          </div>
+          <div class="rung">
+            <span class="rank">2</span>
+            <span class="goal">New car</span>
+            <span class="horizon near">2 yr</span>
+          </div>
+          <div class="rung">
+            <span class="rank">3</span>
+            <span class="goal">Kids' education</span>
+            <span class="horizon mid">15 yr</span>
+          </div>
+          <div class="rung">
+            <span class="rank">4</span>
+            <span class="goal">Retirement</span>
+            <span class="horizon far">25 yr</span>
+          </div>
+        </div>
+
+        <!-- green cap chip -->
+        <div class="cap-chip"><span class="tick">✓</span>Priorities + timelines</div>
+      </div>
+
+      <!-- (5) WHY THIS IS HARD -->
+      <div class="why">
+        <div class="why-label">Why this is hard</div>
+        <p>People can't rank their own goals or put real dates and numbers on them — and the same money can't serve a 2-year and a 20-year goal at once.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESIGN RATIONALE ===== -->
+<div class="rationale">
+  <p class="rat-head">Design Rationale</p>
+  <div class="rat-grid">
+    <div>
+      <p class="t">Chaos resolved into a ladder</p>
+      <p>Eight competing life goals with no order sit as a faint ghost cloud behind the answer — you feel them being consumed. In front, the same goals snap into a ranked, dated ladder. The frame shows the job already done, not the struggle in motion.</p>
+    </div>
+    <div>
+      <p class="t">Priority + timeline is the foundation</p>
+      <p>Near horizons read warm (pink), far horizons read cool (blue) — a 2-year and a 25-year goal literally pull to opposite ends. Until goals are ranked and dated, no later step — net worth, surplus, or the action plan — has anything to optimise against.</p>
+    </div>
+    <div>
+      <p class="t">Colour &amp; state system</p>
+      <p>Green = a hard leg resolved (this node is done). Grey ghost = the un-ordered mess that was eaten. Pink/blue horizon tags mark the opposing time pulls. Identical tokens to every other relay node, so it lifts cleanly into the 4-up slide.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

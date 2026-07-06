@@ -740,6 +740,22 @@
 </div>
 
 <!-- ============================================================ -->
+<!-- SLIDE 3: The Market Gap — "Real advice is a team" (chain relay) -->
+<!-- Embedded as an isolated iframe so its CSS can't collide with the deck. -->
+<!-- ============================================================ -->
+<div class="slide" id="sGap" style="padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)">
+  <iframe id="gapFrame" src="chain-relay-composed.html" scrolling="no" title="Real advice is a team"
+    style="border:0;width:1280px;height:720px;flex:none;transform-origin:center center"></iframe>
+  <script>
+    (function(){
+      var f=document.getElementById('gapFrame');
+      function fit(){ var s=Math.min(window.innerWidth/1280, window.innerHeight/720); f.style.transform='scale('+s+')'; }
+      fit(); window.addEventListener('resize', fit);
+    })();
+  </script>
+</div>
+
+<!-- ============================================================ -->
 <!-- SLIDE 4: Solution -->
 <!-- ============================================================ -->
 <div class="slide white" id="s4" style="padding:16px 50px 10px;display:flex;flex-direction:column">

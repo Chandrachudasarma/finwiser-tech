@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2 · Step ② — The Portfolio Analyst</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  html, body { background: #111; min-height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 24px;
+  }
+
+  /* review stage: column centered + scaled 1.6x; the element stays 290x560 */
+  .stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===== SHARED COLUMN BOX (.step-box contract) ===== */
+  .step-box {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+    background: rgba(255,255,255,0.022);
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 16px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.20);
+    padding: 12px 8px 0;
+    color: #fff;
+  }
+
+  /* ===================================================================== */
+  /* NODE ② — The Portfolio Analyst (resolved / green)                     */
+  /* all selectors prefixed #s2                                            */
+  /* ===================================================================== */
+  #s2 { position: relative; width: 100%; height: 100%; text-align: center; }
+
+  /* Avatar 54px, centered, near top (~y12). Green ring. */
+  #s2 .avatar {
+    width: 54px; height: 54px;
+    margin: 0 auto;
+    border-radius: 50%;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,184,148,0.12);
+    border: 1px solid rgba(0,184,148,0.5);
+    font-family: 'Courier Prime', Courier, monospace;
+    font-weight: 700; font-size: 20px; color: var(--green);
+  }
+  #s2 .avatar .ring { position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.4); }
+
+  /* Role title centered, Inter 800 ~18px, green, baseline ~y86 */
+  #s2 .role {
+    margin-top: 12px;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    line-height: 1.1; color: var(--green);
+  }
+
+  /* Question: reserved 2-line band, min-height 38px, starts ~y100,
+     leaves card top at y152 */
+  #s2 .question {
+    margin-top: 8px;
+    min-height: 38px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    opacity: 0.82;
+    max-width: 250px; margin-left: auto; margin-right: auto;
+  }
+  #s2 .question .strong { font-weight: 700; opacity: 0.98; }
+
+  /* ===== ANSWER CARD — TOP exactly y152, HEIGHT exactly 168 ===== */
+  #s2 .ans-card {
+    position: absolute;
+    top: 152px; left: 18px; right: 18px;
+    height: 168px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 13px;
+    text-align: left;
+    display: flex; flex-direction: column;
+  }
+
+  #s2 .card-label {
+    text-transform: uppercase;
+    font-weight: 700; font-size: 8.5px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* OWN / OWE compact two-column row */
+  #s2 .ownowe {
+    display: flex;
+    margin-top: 6px;
+    gap: 8px;
+  }
+  #s2 .oo {
+    flex: 1;
+    display: flex; flex-direction: column;
+  }
+  #s2 .oo .oo-k {
+    text-transform: uppercase;
+    font-weight: 700; font-size: 8.5px; letter-spacing: 0.8px;
+    color: rgba(255,255,255,0.4);
+  }
+  #s2 .oo .oo-v {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 13px; font-weight: 700; color: #fff;
+    line-height: 1.1; margin-top: 2px;
+  }
+  #s2 .oo.owe .oo-v { color: rgba(255,255,255,0.78); }
+  #s2 .oo-div {
+    width: 1px;
+    background: rgba(255,255,255,0.10);
+    align-self: stretch;
+  }
+
+  /* NET WORTH — the hero */
+  #s2 .hero {
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  #s2 .hero .hero-k {
+    text-transform: uppercase;
+    font-weight: 800; font-size: 9px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.62);
+  }
+  #s2 .hero .hero-v {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-weight: 700; font-size: 28px; line-height: 0.9;
+    color: var(--green);
+    letter-spacing: -0.5px;
+  }
+
+  /* PROTECT — cover vs need, with the shortfall bar */
+  #s2 .protect {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255,255,255,0.14);
+  }
+  #s2 .protect .p-top {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  #s2 .protect .p-label {
+    text-transform: uppercase;
+    font-weight: 700; font-size: 8.5px; letter-spacing: 0.8px;
+    color: rgba(255,255,255,0.4);
+  }
+  #s2 .protect .p-gap {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent-soft);
+  }
+
+  /* the shortfall bar: filled = ₹50L cover (green sliver),
+     empty/red = ₹1.2Cr shortfall (pink). 50L cover of (50L+120L)=170L total ≈ 29%. */
+  #s2 .cover-bar {
+    position: relative;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,107,129,0.16);
+    overflow: hidden;
+    border: 1px solid rgba(255,107,129,0.28);
+  }
+  #s2 .cover-bar .fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 29%;
+    border-radius: 999px;
+    background: var(--green);
+    box-shadow: 0 0 6px rgba(0,184,148,0.5);
+  }
+  #s2 .cover-legend {
+    display: flex; justify-content: space-between;
+    margin-top: 4px;
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 9.5px;
+  }
+  #s2 .cover-legend .cov { color: var(--green); }
+  #s2 .cover-legend .need { color: rgba(255,255,255,0.5); }
+  #s2 .cover-legend .need b { color: var(--accent-soft); font-weight: 700; }
+
+  /* ===== ANSWER CHIP — vertical center at y344 ===== */
+  #s2 .cap-chip {
+    position: absolute;
+    left: 50%;
+    top: 344px;
+    transform: translate(-50%, -50%);
+    display: inline-flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+    background: rgba(0,184,148,0.08);
+    border: 1px solid rgba(0,184,148,0.35);
+    color: var(--green);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px; font-weight: 600;
+  }
+  #s2 .cap-chip::before { content: '✓'; font-weight: 800; }
+
+  /* ===== WHY band — top 410 ===== */
+  #s2 .why {
+    position: absolute;
+    top: 410px;
+    left: 18px; right: 18px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    text-align: left;
+  }
+  #s2 .why .why-label {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  #s2 .why-list {
+    list-style: none; margin: 5px 0 0; padding: 0;
+  }
+  #s2 .why-list li {
+    position: relative;
+    padding-left: 15px;
+    font-size: 12.5px; line-height: 1.38;
+    font-weight: 500;
+    color: rgba(255,255,255,0.86);
+    margin-bottom: 6px;
+  }
+  #s2 .why-list li:last-child { margin-bottom: 0; }
+  #s2 .why-list li::before {
+    content: "—";
+    position: absolute; left: 0;
+    color: var(--accent-soft); font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="step-box">
+      <div id="s2">
+        <div class="avatar">2<span class="ring"></span></div>
+        <div class="role">The Portfolio Analyst</div>
+        <div class="question">What you <span class="strong">OWN</span>, what you <span class="strong">OWE</span>, what <span class="strong">PROTECTS</span> you.</div>
+
+        <!-- ANSWER CARD -->
+        <div class="ans-card">
+          <div class="card-label">Your money, in one truth</div>
+
+          <div class="ownowe">
+            <div class="oo own">
+              <span class="oo-k">Own · assets</span>
+              <span class="oo-v">₹42.6L</span>
+            </div>
+            <div class="oo-div"></div>
+            <div class="oo owe">
+              <span class="oo-k">Owe · liabilities</span>
+              <span class="oo-v">₹18.2L</span>
+            </div>
+          </div>
+
+          <div class="hero">
+            <span class="hero-k">Net worth</span>
+            <span class="hero-v">₹24.4L</span>
+          </div>
+
+          <div class="protect">
+            <div class="p-top">
+              <span class="p-label">Protect · cover vs need</span>
+              <span class="p-gap">−₹1.2Cr gap</span>
+            </div>
+            <div class="cover-bar"><div class="fill"></div></div>
+            <div class="cover-legend">
+              <span class="cov">Cover ₹50L</span>
+              <span class="need">Need <b>₹1.7Cr</b></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANSWER CHIP -->
+        <div class="cap-chip">One net-worth + protection truth</div>
+
+        <!-- WHY band -->
+        <div class="why">
+          <div class="why-label">Why this is hard</div>
+          <ul class="why-list">
+            <li>Money sits in 30+ different places</li>
+            <li>Nothing shows it all in one place</li>
+            <li>You never see your real worth — or if you're covered</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

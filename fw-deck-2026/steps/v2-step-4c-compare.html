@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box ④ — The Investment Adviser · LIGHT vs RED background comparison</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent-hot: #ff5470;
+    --green: #00b894;
+  }
+
+  html, body { background: #111; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* same dark deck gradient the cards sit on in the composed slide */
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 24px;
+  }
+
+  /* ===================================================================== */
+  /* COMPARISON STAGE — two columns side by side, each lifted ~1.5x         */
+  /* ===================================================================== */
+  .compare {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /* generous gap so the two 1.5x-scaled cards never overlap */
+    gap: 230px;
+  }
+  .compare-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .compare-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.78);
+    /* push label clear of the scaled card below */
+    margin-bottom: 170px;
+  }
+  /* review-only: lift each true 290x560 column to ~1.5x for desk-distance review */
+  .review-stage {
+    transform: scale(1.5);
+    transform-origin: top center;
+  }
+
+  /* ===================================================================== */
+  /* THE COLUMN — exact 290 x 560 contract                                  */
+  /* ===================================================================== */
+  .node-col {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .step-box {
+    border-radius: 16px;
+    padding: 12px 8px 0;
+  }
+
+  /* ===================================================================== */
+  /* ===================================================================== */
+  /* ===============  LEFT CARD — LIGHT version (#s4a)  =================== */
+  /* ===================================================================== */
+  /* ===================================================================== */
+
+  /* ④ dead step: LIGHT "rejected / stamped document" card */
+  #s4a-col.step-box.dead {
+    background: linear-gradient(180deg, #f7e8ec 0%, #edd6dc 100%);
+    border: 1.5px dashed rgba(150,92,106,0.45);
+    box-shadow:
+      0 14px 32px rgba(0,0,0,0.22),
+      0 0 24px rgba(150,92,106,0.13);
+  }
+
+  #s4a { position: static; width: 100%; height: 100%; text-align: center; color: #3a2f36; }
+
+  /* ① AVATAR — locked, dead */
+  #s4a .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    border: 2px solid rgba(150,92,106,0.55); background: rgba(255,255,255,0.55);
+    color: #3a2f36; box-shadow: 0 0 14px rgba(150,92,106,0.20);
+  }
+  #s4a .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 1px solid rgba(150,92,106,0.55);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(150,92,106,0.85);
+  }
+
+  /* ② ROLE */
+  #s4a .role {
+    position: absolute; top: 78px; left: 0; right: 0;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px; line-height: 1;
+    color: #3a2f36;
+  }
+
+  /* ③ FRAMING LINE */
+  #s4a .frame {
+    position: absolute; top: 104px; left: 22px; right: 22px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    color: rgba(58,47,53,0.72);
+  }
+  #s4a .frame .strong { font-weight: 700; color: #3a2f36; }
+
+  /* ④ THE TRIANGLE */
+  #s4a .triangle {
+    position: absolute; top: 140px; left: 0; right: 0; height: 290px;
+  }
+  #s4a .tri-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* CORNER NODES — dark-outlined pills on the light bg */
+  #s4a .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    width: 96px;
+  }
+  #s4a .node .disc {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 14px; font-weight: 700;
+    color: #3a2f36;
+    background: rgba(0,184,148,0.10);
+    border: 1.5px solid rgba(0,184,148,0.40);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+  }
+  #s4a .node .nlabel {
+    font-size: 10.5px; line-height: 1.18; font-weight: 700;
+    color: #463b42; letter-spacing: 0.1px;
+    background: rgba(255,255,255,0.78);
+    border: 1.5px solid rgba(26,26,46,0.35);
+    border-radius: 8px;
+    padding: 3px 7px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.10);
+    white-space: nowrap;
+  }
+  #s4a .node.apex {
+    top: 14px; left: 50%; transform: translateX(-50%);
+    flex-direction: column;
+  }
+  #s4a .node.left {
+    bottom: 6px; left: 16px; transform: none;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  #s4a .node.right {
+    bottom: 6px; right: 16px; left: auto; transform: none;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  /* DEAD CENTER — stamp */
+  #s4a .stamp {
+    position: absolute; left: 50%; top: 61.6%;
+    transform: translate(-50%,-50%) rotate(-8deg);
+    z-index: 5; pointer-events: none;
+    padding: 7px 12px;
+    border: 1.5px solid rgba(92,84,108,0.55); border-radius: 7px;
+    background: rgba(247,232,236,0.5);
+    color: rgba(78,70,96,0.78); font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; line-height: 1.05; letter-spacing: 0.5px;
+    text-transform: uppercase; white-space: nowrap;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+  }
+
+  /* ⑤ BOTTOM TAKEAWAY */
+  #s4a .verdict {
+    position: absolute; top: 470px; left: 20px; right: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(26,26,46,0.18);
+    text-align: center;
+  }
+  #s4a .verdict .principle {
+    font-size: 14px; line-height: 1.45; font-weight: 700;
+    color: #3a2f36; letter-spacing: 0.1px;
+    max-width: 250px; margin: 0 auto;
+  }
+
+  /* ===================================================================== */
+  /* ===================================================================== */
+  /* ===============  RIGHT CARD — RED version (#s4b)  =================== */
+  /* ===================================================================== */
+  /* ===================================================================== */
+
+  /* ④ dead step: MUTED RED panel — light dashed border, soft dark+red glow */
+  #s4b-col.step-box.dead {
+    background: linear-gradient(180deg, #8a3446 0%, #5c2230 100%);
+    border: 1.5px dashed rgba(255,200,208,0.40);
+    box-shadow:
+      0 16px 36px rgba(0,0,0,0.35),
+      0 0 26px rgba(233,69,96,0.20);
+  }
+
+  #s4b { position: static; width: 100%; height: 100%; text-align: center; color: rgba(255,255,255,0.96); }
+
+  /* ① AVATAR — light ring, white numeral, soft white glow */
+  #s4b .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.10);
+    color: #fff; box-shadow: 0 0 14px rgba(255,255,255,0.25);
+  }
+  #s4b .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(120,40,55,0.95);
+  }
+
+  /* ② ROLE — light ink */
+  #s4b .role {
+    position: absolute; top: 78px; left: 0; right: 0;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px; line-height: 1;
+    color: rgba(255,255,255,0.96);
+  }
+
+  /* ③ FRAMING LINE — light ink */
+  #s4b .frame {
+    position: absolute; top: 104px; left: 22px; right: 22px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    color: rgba(255,255,255,0.80);
+  }
+  #s4b .frame .strong { font-weight: 700; color: rgba(255,255,255,0.97); }
+
+  /* ④ THE TRIANGLE */
+  #s4b .triangle {
+    position: absolute; top: 140px; left: 0; right: 0; height: 290px;
+  }
+  #s4b .tri-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* CORNER NODES — LIGHT pills with dark text so labels read on red */
+  #s4b .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    width: 96px;
+  }
+  #s4b .node .disc {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 14px; font-weight: 700;
+    color: #1f3a33;
+    /* faint green tint retained, dark numerals */
+    background: rgba(0,184,148,0.20);
+    border: 1.5px solid rgba(0,184,148,0.55);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+  }
+  #s4b .node .nlabel {
+    font-size: 10.5px; line-height: 1.18; font-weight: 700;
+    color: #3a2f36; letter-spacing: 0.1px;
+    background: rgba(255,255,255,0.92);
+    border: 1.5px solid rgba(255,210,218,0.55);
+    border-radius: 8px;
+    padding: 3px 7px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.25);
+    white-space: nowrap;
+  }
+  #s4b .node.apex {
+    top: 14px; left: 50%; transform: translateX(-50%);
+    flex-direction: column;
+  }
+  #s4b .node.left {
+    bottom: 6px; left: 16px; transform: none;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  #s4b .node.right {
+    bottom: 6px; right: 16px; left: auto; transform: none;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  /* DEAD CENTER — LIGHT cream stamp on red, faint dark backing */
+  #s4b .stamp {
+    position: absolute; left: 50%; top: 61.6%;
+    transform: translate(-50%,-50%) rotate(-8deg);
+    z-index: 5; pointer-events: none;
+    padding: 7px 12px;
+    border: 1.5px solid rgba(255,235,238,0.75); border-radius: 7px;
+    background: rgba(60,18,28,0.45);
+    color: rgba(255,240,242,0.92); font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; line-height: 1.05; letter-spacing: 0.5px;
+    text-transform: uppercase; white-space: nowrap;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+  }
+
+  /* ⑤ BOTTOM TAKEAWAY — light ink */
+  #s4b .verdict {
+    position: absolute; top: 470px; left: 20px; right: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+    text-align: center;
+  }
+  #s4b .verdict .principle {
+    font-size: 14px; line-height: 1.45; font-weight: 700;
+    color: rgba(255,255,255,0.92); letter-spacing: 0.1px;
+    max-width: 250px; margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+  <div class="compare">
+
+    <!-- ============================ LEFT: LIGHT ============================ -->
+    <div class="compare-cell">
+      <div class="compare-label">Light background</div>
+      <div class="review-stage">
+        <div id="s4a-col" class="node-col step-box dead">
+          <div id="s4a">
+
+            <!-- ① AVATAR — locked, dead -->
+            <div class="avatar">4<span class="lock">&#128274;</span></div>
+
+            <!-- ② ROLE -->
+            <div class="role">The Investment Adviser</div>
+
+            <!-- ③ FRAMING LINE -->
+            <div class="frame">Holistic advice forms only where <span class="strong">all three connect.</span></div>
+
+            <!-- ④ THE TRIANGLE -->
+            <div class="triangle">
+              <svg class="tri-svg" viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="tri4a-glow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="0.6" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- ===== EDGE A: APEX → LEFT ===== -->
+                <g filter="url(#tri4a-glow)" stroke="#c2808c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M145 72 L110.4 138.7"/>
+                  <path d="M62 232 L96.6 165.3"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#b56f7c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M110.4 138.7 l-4 -2.1 l9.4 1.5"/>
+                  <path d="M96.6 165.3 l4 2.1 l-9.4 -1.5"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#cf9aa4" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M99.5 149.9 l-7.1 -3.7"/><path d="M107.5 154.1 l7.1 3.7"/>
+                  <path d="M99.9 154.6 l-6.5 4.7"/><path d="M103.6 147.5 l0.1 -8"/>
+                  <path d="M107.1 149.4 l6.5 -4.7"/>
+                </g>
+
+                <!-- ===== EDGE B: APEX → RIGHT ===== -->
+                <g filter="url(#tri4a-glow)" stroke="#c2808c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M145 72 L179.6 138.7"/>
+                  <path d="M228 232 L193.4 165.3"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#b56f7c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M179.6 138.7 l-4 2.1 l6.6 -6.8"/>
+                  <path d="M193.4 165.3 l4 -2.1 l-6.6 6.8"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#cf9aa4" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M182.5 154.1 l-7.1 3.7"/><path d="M190.5 149.9 l7.1 -3.7"/>
+                  <path d="M186.6 156.5 l0.1 8"/><path d="M182.9 149.4 l-6.5 -4.7"/>
+                  <path d="M186.4 147.5 l-0.1 -8"/>
+                </g>
+
+                <!-- ===== EDGE C: LEFT → RIGHT (the base) ===== -->
+                <g filter="url(#tri4a-glow)" stroke="#c2808c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M62 232 L130 232"/>
+                  <path d="M228 232 L160 232"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#b56f7c" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M130 232 l0 4.5 l-3 -9"/>
+                  <path d="M160 232 l0 -4.5 l3 9"/>
+                </g>
+                <g filter="url(#tri4a-glow)" stroke="#cf9aa4" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M145 236.5 l0 8"/><path d="M145 227.5 l0 -8"/>
+                  <path d="M149 234 l7.2 3.6"/><path d="M141 234 l-7.2 3.6"/>
+                  <path d="M141 230 l-7.2 -3.6"/>
+                </g>
+              </svg>
+
+              <!-- CORNER NODES -->
+              <div class="node apex">
+                <div class="disc">&#9312;</div>
+                <div class="nlabel">Goal Planning</div>
+              </div>
+              <div class="node left">
+                <div class="disc">&#9313;</div>
+                <div class="nlabel">Portfolio<br>Analysis</div>
+              </div>
+              <div class="node right">
+                <div class="disc">&#9314;</div>
+                <div class="nlabel">Cashflow<br>Analysis</div>
+              </div>
+
+              <!-- DEAD CENTER — stamp -->
+              <div class="stamp">Advice never complete</div>
+            </div>
+
+            <!-- ⑤ BOTTOM TAKEAWAY -->
+            <div class="verdict">
+              <div class="principle">It takes all three connected to give complete advice.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================ RIGHT: RED ============================ -->
+    <div class="compare-cell">
+      <div class="compare-label">Red background</div>
+      <div class="review-stage">
+        <div id="s4b-col" class="node-col step-box dead">
+          <div id="s4b">
+
+            <!-- ① AVATAR — locked, dead -->
+            <div class="avatar">4<span class="lock">&#128274;</span></div>
+
+            <!-- ② ROLE -->
+            <div class="role">The Investment Adviser</div>
+
+            <!-- ③ FRAMING LINE -->
+            <div class="frame">Holistic advice forms only where <span class="strong">all three connect.</span></div>
+
+            <!-- ④ THE TRIANGLE -->
+            <div class="triangle">
+              <svg class="tri-svg" viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="tri4b-glow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="0.8" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- ===== EDGE A: APEX → LEFT ===== -->
+                <g filter="url(#tri4b-glow)" stroke="#ffd0d8" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M145 72 L110.4 138.7"/>
+                  <path d="M62 232 L96.6 165.3"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M110.4 138.7 l-4 -2.1 l9.4 1.5"/>
+                  <path d="M96.6 165.3 l4 2.1 l-9.4 -1.5"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M99.5 149.9 l-7.1 -3.7"/><path d="M107.5 154.1 l7.1 3.7"/>
+                  <path d="M99.9 154.6 l-6.5 4.7"/><path d="M103.6 147.5 l0.1 -8"/>
+                  <path d="M107.1 149.4 l6.5 -4.7"/>
+                </g>
+
+                <!-- ===== EDGE B: APEX → RIGHT ===== -->
+                <g filter="url(#tri4b-glow)" stroke="#ffd0d8" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M145 72 L179.6 138.7"/>
+                  <path d="M228 232 L193.4 165.3"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M179.6 138.7 l-4 2.1 l6.6 -6.8"/>
+                  <path d="M193.4 165.3 l4 -2.1 l-6.6 6.8"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M182.5 154.1 l-7.1 3.7"/><path d="M190.5 149.9 l7.1 -3.7"/>
+                  <path d="M186.6 156.5 l0.1 8"/><path d="M182.9 149.4 l-6.5 -4.7"/>
+                  <path d="M186.4 147.5 l-0.1 -8"/>
+                </g>
+
+                <!-- ===== EDGE C: LEFT → RIGHT (the base) ===== -->
+                <g filter="url(#tri4b-glow)" stroke="#ffd0d8" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M62 232 L130 232"/>
+                  <path d="M228 232 L160 232"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="3.2"
+                   stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M130 232 l0 4.5 l-3 -9"/>
+                  <path d="M160 232 l0 -4.5 l3 9"/>
+                </g>
+                <g filter="url(#tri4b-glow)" stroke="#ffe1e6" stroke-width="2.6" stroke-linecap="round">
+                  <path d="M145 236.5 l0 8"/><path d="M145 227.5 l0 -8"/>
+                  <path d="M149 234 l7.2 3.6"/><path d="M141 234 l-7.2 3.6"/>
+                  <path d="M141 230 l-7.2 -3.6"/>
+                </g>
+              </svg>
+
+              <!-- CORNER NODES -->
+              <div class="node apex">
+                <div class="disc">&#9312;</div>
+                <div class="nlabel">Goal Planning</div>
+              </div>
+              <div class="node left">
+                <div class="disc">&#9313;</div>
+                <div class="nlabel">Portfolio<br>Analysis</div>
+              </div>
+              <div class="node right">
+                <div class="disc">&#9314;</div>
+                <div class="nlabel">Cashflow<br>Analysis</div>
+              </div>
+
+              <!-- DEAD CENTER — stamp -->
+              <div class="stamp">Advice never complete</div>
+            </div>
+
+            <!-- ⑤ BOTTOM TAKEAWAY -->
+            <div class="verdict">
+              <div class="principle">It takes all three connected to give complete advice.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

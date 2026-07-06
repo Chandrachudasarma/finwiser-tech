@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chain of Specialists — Slide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 28px;
+  }
+
+  .label {
+    color: #666;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* ===== SLIDE CONTAINER ===== */
+  .slide {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-number {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    font-size: 14px;
+    opacity: 0.4;
+    font-weight: 500;
+  }
+
+  .logo-bar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+  }
+  .logo-bar .logo-chip {
+    width: 60px; height: 60px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; opacity: 0.5; letter-spacing: 1px;
+  }
+
+  h2 {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    max-width: 860px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .slide.s-headline h2 { opacity: 1; transform: translateY(0); }
+
+  .subline {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0;
+    transform: translateY(12px);
+    max-width: 760px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    transition: opacity .7s ease .15s, transform .7s ease .15s;
+  }
+  .slide.s-headline .subline { opacity: 0.8; transform: translateY(0); }
+  .subline .em { color: var(--accent-soft); font-weight: 600; }
+
+  /* ===== RELAY STAGE ===== */
+  .relay {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0;
+    margin: 28px 0 8px;
+    position: relative;
+  }
+
+  .node {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 14px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* avatar */
+  .avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 800;
+    margin-bottom: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+    transition: all .5s cubic-bezier(.22,.61,.36,1);
+    position: relative;
+  }
+  .avatar .ring {
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+
+  .role {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+    color: rgba(255,255,255,0.55);
+    transition: color .5s ease;
+    min-height: 16px;
+  }
+
+  .question {
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0.6;
+    max-width: 215px;
+    margin-bottom: 14px;
+    transition: opacity .5s ease;
+    font-weight: 400;
+  }
+  .question .strong { font-weight: 700; opacity: 0.95; }
+
+  /* work zone (mess / collapse / checklist) */
+  .work {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 168px;
+  }
+
+  /* output chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.85);
+    opacity: 0;
+    transform: scale(.7);
+    transition: opacity .5s ease, transform .55s cubic-bezier(.22,1.2,.36,1), box-shadow .5s ease, border-color .5s ease, background .5s ease, color .5s ease;
+    text-align: center;
+    max-width: 200px;
+    z-index: 3;
+  }
+  .chip.show { opacity: 1; transform: scale(1); }
+  .chip.pink {
+    border-color: rgba(233,69,96,0.5);
+    background: rgba(233,69,96,0.12);
+    color: var(--accent-soft);
+  }
+  .chip.green {
+    border-color: rgba(0,184,148,0.55);
+    background: rgba(0,184,148,0.12);
+    color: var(--green);
+    box-shadow: 0 0 22px rgba(0,184,148,0.32);
+  }
+
+  /* ===== NODE STATE: avatar glows ===== */
+  .node.active .avatar {
+    border-color: var(--accent);
+    color: #fff;
+    background: rgba(233,69,96,0.18);
+    box-shadow: 0 0 24px rgba(233,69,96,0.55);
+  }
+  .node.active .avatar .ring { opacity: 1; border-color: rgba(233,69,96,0.4); animation: pulse 1.6s ease-in-out infinite; }
+  .node.active .role { color: var(--accent-soft); }
+  .node.active .question { opacity: 0.92; }
+
+  .node.resolved .avatar {
+    border-color: var(--green);
+    color: #fff;
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+  }
+  .node.resolved .avatar .ring { opacity: 1; border-color: rgba(0,184,148,0.4); }
+  .node.resolved .role { color: var(--green); }
+  .node.resolved .question { opacity: 0.75; }
+
+  .node.dormant .avatar { opacity: 0.4; }
+  .node.dormant .role,
+  .node.dormant .question { opacity: 0.28; }
+  /* node 4 dead while waiting */
+  .node.dead .avatar {
+    border-color: rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.3);
+    box-shadow: none;
+    opacity: 0.45;
+  }
+  .node.dead .role, .node.dead .question { opacity: 0.3; }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: .8; }
+    50% { transform: scale(1.12); opacity: .2; }
+  }
+
+  /* ===== MESS LAYER (node 2): scattered asset chips ===== */
+  .mess {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .mess .m {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.55);
+    opacity: 0;
+    transform: translate(-50%,-50%) scale(.6);
+    transition: opacity .5s ease, transform .65s cubic-bezier(.5,0,.2,1);
+    white-space: nowrap;
+    left: 50%; top: 50%;
+  }
+  /* faint visible state */
+  .work.mess-visible .m { opacity: .55; }
+  /* collapse: all converge to center & fade */
+  .work.mess-collapse .m {
+    left: 50% !important; top: 50% !important;
+    transform: translate(-50%,-50%) scale(.2) !important;
+    opacity: 0 !important;
+  }
+
+  /* ===== STATEMENT ROWS (node 3) ===== */
+  .rows {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 6px;
+    pointer-events: none;
+  }
+  .rows .r {
+    height: 11px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+    opacity: 0;
+    transform: translateX(0) scaleX(1);
+    transition: opacity .5s ease, transform .6s cubic-bezier(.5,0,.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .rows .r::after {
+    content: '';
+    position: absolute; top: 0; left: -40%;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  }
+  .work.rows-visible .r { opacity: .5; }
+  .work.rows-visible .r::after { animation: shimmer 1.8s linear infinite; }
+  .work.rows-collapse .r {
+    opacity: 0 !important;
+    transform: translateY(var(--cy,0)) scaleX(.05) !important;
+  }
+  @keyframes shimmer { from { left: -40%; } to { left: 140%; } }
+
+  /* ===== CHECKLIST (node 4) ===== */
+  .checklist {
+    width: 100%;
+    max-width: 230px;
+    text-align: left;
+    background: rgba(0,184,148,0.06);
+    border: 1px solid rgba(0,184,148,0.28);
+    border-radius: 12px;
+    padding: 12px 13px;
+    opacity: 0;
+    transform: translateY(10px) scale(.96);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.22,1.2,.36,1), box-shadow .5s ease;
+  }
+  .checklist.show {
+    opacity: 1; transform: translateY(0) scale(1);
+    box-shadow: 0 0 26px rgba(0,184,148,0.3);
+  }
+  .checklist .cl-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--green);
+    margin-bottom: 9px;
+  }
+  .checklist .cl-item {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: 8px;
+    display: flex;
+    gap: 7px;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .checklist .cl-item:last-child { margin-bottom: 0; }
+  .checklist .cl-item.show { opacity: 1; transform: translateX(0); }
+  .checklist .tick {
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .checklist .cl-item b { color: #fff; font-weight: 700; }
+
+  /* ghost / locked checklist (PROBLEM ending — advice never delivered) */
+  .checklist.ghost {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.03);
+    box-shadow: none;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .checklist.ghost .cl-title { color: rgba(255,255,255,0.4); }
+  /* empty ticks, greyed dashed text */
+  .checklist.ghost .cl-item {
+    opacity: 1 !important;
+    transform: none !important;
+    color: rgba(255,255,255,0.22);
+  }
+  .checklist.ghost .cl-item b { color: rgba(255,255,255,0.3); }
+  .checklist.ghost .cl-item .tick {
+    color: transparent;
+    border: 1.4px solid rgba(255,255,255,0.22);
+    border-radius: 3px;
+    width: 12px; height: 12px;
+    display: inline-block;
+    margin-top: 1px;
+    font-size: 0;
+  }
+  .cl-ghost {
+    display: none;
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px dashed rgba(255,255,255,0.14);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--accent-soft);
+    opacity: 0;
+    transition: opacity .5s ease;
+  }
+  .checklist.ghost .cl-ghost { display: block; }
+  .checklist.ghost.ghost-show .cl-ghost { opacity: 0.9; }
+
+  /* ===== BATONS (connectors) ===== */
+  .baton {
+    position: absolute;
+    top: 32px;            /* center of 64px avatar */
+    height: 2px;
+    z-index: 1;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    overflow: visible;
+    transition: background .4s ease;
+  }
+  /* moving dot */
+  .baton .dot {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    box-shadow: 0 0 12px rgba(233,69,96,0.9);
+    transform: translate(-50%,-50%);
+    opacity: 0;
+  }
+  /* fill that traces behind the dot */
+  .baton .fill {
+    position: absolute;
+    top: 0; left: 0; height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(233,69,96,0.6), rgba(233,69,96,0.9));
+    border-radius: 2px;
+    transition: width .9s cubic-bezier(.4,0,.2,1);
+  }
+  .baton.flowing .dot {
+    opacity: 1;
+    animation: batonRun 1s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .baton.flowing .fill { width: 100%; }
+  .baton.done { background: rgba(0,184,148,0.35); }
+  .baton.done .fill { width: 100%; background: linear-gradient(90deg, rgba(0,184,148,0.6), rgba(0,184,148,0.95)); }
+  .baton.done .dot { opacity: 0; }
+
+  /* stalled / dead baton (competitor) */
+  .baton.stalled {
+    background: rgba(233,69,96,0.18);
+  }
+  .baton.stalled .fill {
+    width: 45% !important;
+    background: linear-gradient(90deg, rgba(233,69,96,0.55), rgba(233,69,96,0.2));
+    transition: width .5s ease;
+  }
+  .baton.stalled .dot {
+    opacity: 1;
+    left: 45% !important;
+    animation: none !important;
+    background: #e94560;
+    box-shadow: 0 0 10px rgba(233,69,96,0.6);
+    animation: stallBlink 0.9s ease-in-out infinite !important;
+  }
+  @keyframes stallBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+  @keyframes batonRun { from { left: 0%; } to { left: 100%; } }
+
+  /* ===== KICKER BAR ===== */
+  .slide-bar {
+    margin-top: auto;
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+    background: rgba(255,255,255,0.95);
+    color: var(--primary);
+    align-self: center;
+    max-width: fit-content;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .slide-bar.show { opacity: 1; transform: translateY(0); }
+
+  /* ===== CONTROLS ===== */
+  .controls {
+    position: absolute;
+    bottom: 18px;
+    left: 30px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+    align-items: center;
+  }
+  .ctrl-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 20px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .ctrl-btn:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.3); }
+  .ctrl-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 500;
+  }
+
+  /* ===== RATIONALE PANEL ===== */
+  .rationale {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 4px;
+    padding: 32px 40px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .rationale .rat-head {
+    color: #f39c12;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .rat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .rat-grid .t { color: white; font-weight: 600; margin-bottom: 4px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .slide { padding: 36px 26px; }
+    h2 { font-size: 27px; }
+    .subline { font-size: 15px; }
+    .relay { flex-direction: column; align-items: stretch; gap: 16px; }
+    .node {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      text-align: left;
+      padding: 0;
+      gap: 6px 14px;
+    }
+    .avatar { margin-bottom: 0; width: 52px; height: 52px; font-size: 20px; }
+    .role { flex: 1; margin-bottom: 0; min-height: 0; text-align: left; }
+    .question { flex: 1 1 100%; max-width: none; margin-bottom: 8px; }
+    .work { flex: 1 1 100%; min-height: 96px; justify-content: flex-start; }
+    .checklist { max-width: 100%; }
+    /* batons become vertical between stacked nodes */
+    .baton {
+      top: auto !important;
+      left: 26px !important;
+      width: 2px !important;
+      height: 18px !important;
+    }
+    .baton .fill { width: 100% !important; height: 0; transition: height .9s cubic-bezier(.4,0,.2,1); }
+    .baton.flowing .fill, .baton.done .fill { height: 100%; }
+    .baton .dot { display: none; }
+    .rat-grid { grid-template-columns: 1fr; gap: 16px; }
+    .slide-bar { font-size: 15px; padding: 13px 20px; }
+    .controls { left: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<p class="label">Slide — The Chain of Specialists</p>
+
+<div class="slide" id="slide">
+
+  <div class="logo-bar"><div class="logo-chip">FINNY</div></div>
+
+  <h2>Real advice isn't an app. It's a team.</h2>
+  <p class="subline">The wealthy hire that team. <span class="em">You can't.</span></p>
+
+  <!-- ===== RELAY ===== -->
+  <div class="relay" id="relay">
+
+    <!-- batons absolutely positioned, computed by JS -->
+    <div class="baton" id="b1"><div class="fill"></div><div class="dot"></div></div>
+    <div class="baton" id="b2"><div class="fill"></div><div class="dot"></div></div>
+    <div class="baton" id="b3"><div class="fill"></div><div class="dot"></div></div>
+
+    <!-- NODE 1 -->
+    <div class="node dormant" id="n1">
+      <div class="avatar">1<span class="ring"></span></div>
+      <div class="role">The Goal-Setter</div>
+      <div class="question">What matters most — <span class="strong">and by when?</span></div>
+      <div class="work">
+        <div class="chip pink" id="c1">Priorities + timelines</div>
+      </div>
+    </div>
+
+    <!-- NODE 2 -->
+    <div class="node dormant" id="n2">
+      <div class="avatar">2<span class="ring"></span></div>
+      <div class="role">The Portfolio Analyst</div>
+      <div class="question">What you <span class="strong">OWN</span>, what you <span class="strong">OWE</span>, what <span class="strong">PROTECTS</span> you</div>
+      <div class="work" id="w2">
+        <div class="mess" id="mess2"></div>
+        <div class="chip green" id="c2">One net-worth + protection truth</div>
+      </div>
+    </div>
+
+    <!-- NODE 3 -->
+    <div class="node dormant" id="n3">
+      <div class="avatar">3<span class="ring"></span></div>
+      <div class="role">The Cashflow Reader</div>
+      <div class="question">Lifestyle <span class="strong">in</span> − lifestyle <span class="strong">out</span></div>
+      <div class="work" id="w3">
+        <div class="rows" id="rows3"></div>
+        <div class="chip green" id="c3">₹ real investable surplus</div>
+      </div>
+    </div>
+
+    <!-- NODE 4 -->
+    <div class="node dead" id="n4">
+      <div class="avatar">4<span class="ring"></span></div>
+      <div class="role">The Optimiser → Steps</div>
+      <div class="question">One portfolio can't serve a <span class="strong">2-yr</span> and a <span class="strong">20-yr</span> goal</div>
+      <div class="work">
+        <div class="checklist" id="check4">
+          <div class="cl-title">Your next 3 actions</div>
+          <div class="cl-item" id="cli1"><span class="tick">☑</span><span>Move <b>₹40,000</b> from idle savings → liquid fund</span></div>
+          <div class="cl-item" id="cli2"><span class="tick">☑</span><span>Top-up term cover by <b>₹50 lakh</b></span></div>
+          <div class="cl-item" id="cli3"><span class="tick">☑</span><span>Start <b>₹15,000/mo</b> SIP for the 20-yr goal</span></div>
+          <div class="cl-ghost" id="clGhost">🔒 — never delivered —</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- kicker -->
+  <div class="slide-bar" id="kicker">Every app builds one link. The baton never finishes — so no one actually advises you.</div>
+
+  <!-- controls -->
+  <div class="controls">
+    <button class="ctrl-btn" id="replayBtn">▷ Replay</button>
+    <span class="ctrl-hint" id="hint">click slide to step →</span>
+  </div>
+
+  <div class="slide-number">11</div>
+</div>
+
+<!-- ===== RATIONALE PANEL ===== -->
+<div class="rationale">
+  <p class="rat-head">Design Rationale</p>
+  <div class="rat-grid">
+    <div>
+      <p class="t">One idea, not four features</p>
+      <p>The slide says advice is a RELAY of specialists, not a feature list. Everything serves that.</p>
+    </div>
+    <div>
+      <p class="t">The mess IS the problem</p>
+      <p>Nodes 2 &amp; 3 show real difficulty — 30+ accounts, stacks of statements — that must collapse into one answer. The collapse proves how hard each single leg genuinely is.</p>
+    </div>
+    <div>
+      <p class="t">Dependency shown, not claimed</p>
+      <p>Node 4 — the actual advice — can only fire if 1-2-3 feed it. Showing the three hand toward a locked node 4 makes the dependency literal, not rhetorical.</p>
+    </div>
+    <div>
+      <p class="t">To-do list, not dashboard</p>
+      <p>Node 4's output is a 3-item checklist, not charts — the advice should be steps, not data. Here it appears only as a ghost, so you feel exactly what never arrives.</p>
+    </div>
+    <div>
+      <p class="t">Ends unresolved on purpose</p>
+      <p>The slide is pure problem; the next slide reveals the solution. The dead baton — broken handoffs, node 4 never lighting — makes the viewer crave the team that completes the relay.</p>
+    </div>
+    <div>
+      <p class="t">Colour system</p>
+      <p>Pink = a step firing / proven. Green = a hard leg resolved. Grey = dormant/locked. Red baton in the gap = the handoff that breaks between separate apps.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---- Build the scattered "mess" chips for node 2 ----
+  var assetLabels = ["MF","Stocks","EPF","FD","NPS","Gold","ULIP","Loan","Term","Health","PPF","RSU","SGB","REIT","Bonds","Cash"];
+  // pre-scatter positions (% within the work box), pseudo-random but fixed
+  var scatter = [
+    [18,16],[44,10],[72,14],[88,30],[14,40],[38,34],[60,30],[83,52],
+    [22,62],[50,56],[70,64],[90,74],[16,82],[40,80],[62,86],[34,68]
+  ];
+  var mess2 = $("mess2");
+  var messChips = [];
+  for (var i = 0; i < assetLabels.length; i++) {
+    var el = document.createElement("div");
+    el.className = "m";
+    el.textContent = assetLabels[i];
+    el.style.left = scatter[i][0] + "%";
+    el.style.top = scatter[i][1] + "%";
+    el.style.transitionDelay = (i * 18) + "ms";
+    mess2.appendChild(el);
+    messChips.push(el);
+  }
+
+  // ---- Build statement rows for node 3 ----
+  var rows3 = $("rows3");
+  var rowEls = [];
+  var nRows = 9;
+  for (var r = 0; r < nRows; r++) {
+    var rw = document.createElement("div");
+    rw.className = "r";
+    rw.style.width = (60 + ((r * 37) % 38)) + "%";
+    rw.style.transitionDelay = (r * 30) + "ms";
+    // converge direction: top rows fall down, bottom rows rise up
+    var cy = ((r - (nRows - 1) / 2) * -10);
+    rw.style.setProperty("--cy", cy + "px");
+    rows3.appendChild(rw);
+    rowEls.push(rw);
+  }
+
+  // ---- Position batons between avatars (desktop horizontal) ----
+  var nodes = [$("n1"), $("n2"), $("n3"), $("n4")];
+  var batons = [$("b1"), $("b2"), $("b3")];
+  function layoutBatons() {
+    if (window.innerWidth <= 900) { return; } // CSS handles vertical
+    var relayRect = $("relay").getBoundingClientRect();
+    for (var k = 0; k < 3; k++) {
+      var a = nodes[k].querySelector(".avatar").getBoundingClientRect();
+      var b = nodes[k + 1].querySelector(".avatar").getBoundingClientRect();
+      var startX = a.right - relayRect.left + 6;
+      var endX = b.left - relayRect.left - 6;
+      batons[k].style.left = startX + "px";
+      batons[k].style.width = Math.max(0, endX - startX) + "px";
+      batons[k].style.top = (a.top - relayRect.top + a.height / 2) + "px";
+    }
+  }
+  window.addEventListener("resize", function () { layoutBatons(); });
+
+  // ---- State helpers ----
+  function setNode(node, state) {
+    node.classList.remove("dormant", "active", "resolved", "dead");
+    if (state) { node.classList.add(state); }
+  }
+
+  // ---- Timeline infrastructure ----
+  // Each beat exposes play(later) [animated] and snap() [instant end-state].
+  // Manual stepping snaps already-seen beats, then plays exactly one per click.
+  var timers = [];
+  var manual = false;
+  var idx = 0; // next beat to play
+
+  function clearTimers() {
+    for (var t = 0; t < timers.length; t++) { clearTimeout(timers[t]); }
+    timers = [];
+  }
+  function later(fn, ms) { var id = setTimeout(fn, ms); timers.push(id); return id; }
+
+  // baseline state for each node/baton, used by snap()
+  function clr() { ["c1","c2","c3"].forEach(function (id) { $(id).classList.remove("show"); }); }
+
+  function reset() {
+    clearTimers();
+    $("slide").classList.remove("s-headline");
+    setNode(nodes[0], "dormant");
+    setNode(nodes[1], "dormant");
+    setNode(nodes[2], "dormant");
+    setNode(nodes[3], "dead");
+    clr();
+    $("w2").classList.remove("mess-visible", "mess-collapse");
+    $("w3").classList.remove("rows-visible", "rows-collapse");
+    $("check4").classList.remove("show", "ghost", "ghost-show");
+    ["cli1","cli2","cli3"].forEach(function (id) { $(id).classList.remove("show"); });
+    batons.forEach(function (b) { b.className = "baton"; });
+    $("kicker").classList.remove("show");
+    idx = 0;
+    layoutBatons();
+  }
+
+  // ---- Beats ----
+  var beats = [
+
+    // 0: headline + sub
+    {
+      play: function () { $("slide").classList.add("s-headline"); },
+      snap: function () { $("slide").classList.add("s-headline"); }
+    },
+
+    // 1: node 1 ignites, chip, baton 1 flows
+    {
+      play: function () {
+        setNode(nodes[0], "active");
+        later(function () { $("c1").classList.add("show"); }, 350);
+        later(function () { batons[0].classList.add("flowing"); }, 650);
+      },
+      snap: function () {
+        setNode(nodes[0], "active");
+        $("c1").classList.add("show");
+        batons[0].className = "baton flowing";
+      }
+    },
+
+    // 2: HERO — node 2 mess converges & collapses into green chip
+    {
+      play: function () {
+        batons[0].className = "baton done";
+        setNode(nodes[0], "resolved");
+        setNode(nodes[1], "active");
+        $("w2").classList.add("mess-visible");
+        later(function () { $("w2").classList.add("mess-collapse"); }, 900);
+        later(function () { $("c2").classList.add("show"); setNode(nodes[1], "resolved"); }, 1500);
+        later(function () { batons[1].classList.add("flowing"); }, 1850);
+      },
+      snap: function () {
+        batons[0].className = "baton done";
+        setNode(nodes[0], "resolved");
+        setNode(nodes[1], "resolved");
+        $("w2").classList.add("mess-visible");
+        $("w2").classList.add("mess-collapse");
+        $("c2").classList.add("show");
+        batons[1].className = "baton flowing";
+      }
+    },
+
+    // 3: node 3 statement-rows shimmer then collapse into green chip
+    {
+      play: function () {
+        batons[1].className = "baton done";
+        setNode(nodes[2], "active");
+        $("w3").classList.add("rows-visible");
+        later(function () { $("w3").classList.remove("rows-visible"); $("w3").classList.add("rows-collapse"); }, 900);
+        later(function () { $("c3").classList.add("show"); setNode(nodes[2], "resolved"); }, 1450);
+        later(function () { batons[2].classList.add("flowing"); }, 1800);
+      },
+      snap: function () {
+        batons[1].className = "baton done";
+        setNode(nodes[2], "resolved");
+        $("w3").classList.add("rows-collapse");
+        $("c3").classList.add("show");
+        batons[2].className = "baton flowing";
+      }
+    },
+
+    // 4: DEPENDENCY (C) — 1-2-3 done & handing toward 4. Node 4 is the awaited
+    //    "actual advice", but stays locked/dark; its checklist appears only as a
+    //    faint outline (the promise of what SHOULD be delivered).
+    {
+      play: function () {
+        batons[2].className = "baton done";       // 1-2-3 all feed forward
+        // node 4 remains dead/locked — the target, not yet lit
+        setNode(nodes[3], "dead");
+        later(function () { showGhost(false); }, 350); // outline, no "never delivered" yet
+      },
+      snap: function () {
+        batons[2].className = "baton done";
+        setNode(nodes[3], "dead");
+        showGhost(false);
+      }
+    },
+
+    // 5: THE PROBLEM (D) — each node is a SEPARATE app, so the connectors break.
+    //    Baton toward ④ STALLS in the gap; ④ never lights; checklist = "never delivered".
+    {
+      play: function () { applyBreak(); later(function () { $("check4").classList.add("ghost-show"); }, 500); },
+      snap: function () { applyBreak(); $("check4").classList.add("ghost-show"); }
+    },
+
+    // 6: closer bar (problem-framed, hands to next slide)
+    {
+      play: function () { $("kicker").classList.add("show"); },
+      snap: function () { $("kicker").classList.add("show"); }
+    }
+  ];
+
+  // node 4 ghost checklist (outline of the advice that should be handed over)
+  function showGhost(withNeverDelivered) {
+    $("check4").classList.add("ghost", "show");
+    if (withNeverDelivered) { $("check4").classList.add("ghost-show"); }
+  }
+
+  // THE PROBLEM ending: separate apps => broken handoffs; advice never arrives.
+  function applyBreak() {
+    // 1-2-3 stay lit/resolved (each leg works in isolation)
+    setNode(nodes[0], "resolved");
+    setNode(nodes[1], "resolved");
+    setNode(nodes[2], "resolved");
+    $("c1").classList.add("show");
+    $("c2").classList.add("show");
+    $("c3").classList.add("show");
+    // batons between separate apps break — last handoff toward ④ stalls in the gap
+    batons[0].className = "baton stalled";
+    batons[1].className = "baton stalled";
+    batons[2].className = "baton stalled";
+    // node 4 NEVER lights — locked, advice never delivered
+    setNode(nodes[3], "dead");
+    showGhost(true);
+  }
+
+  // ---- Auto schedule (ms offsets) ----
+  var schedule = [0, 700, 2200, 4600, 6900, 9400, 11200];
+
+  function runAuto() {
+    manual = false;
+    $("hint").textContent = "click slide to step →";
+    reset();
+    for (var s = 0; s < beats.length; s++) {
+      (function (n) {
+        later(function () {
+          if (manual) { return; }
+          beats[n].play();
+          idx = n + 1;
+        }, schedule[n]);
+      })(s);
+    }
+  }
+
+  // ---- Manual stepping ----
+  $("slide").addEventListener("click", function (e) {
+    if (e.target.closest(".controls")) { return; }
+    if (!manual) {
+      // freeze autoplay; snap everything already shown to a clean end-state
+      manual = true;
+      clearTimers();
+      var seen = idx; // beats already played by autoplay
+      reset();
+      manual = true;
+      for (var j = 0; j < seen; j++) { beats[j].snap(); }
+      idx = seen;
+      $("hint").textContent = "manual · click to step →";
+    }
+    if (idx >= beats.length) { reset(); manual = true; idx = 0; }
+    beats[idx].play();
+    idx++;
+  });
+
+  $("replayBtn").addEventListener("click", function (e) {
+    e.stopPropagation();
+    runAuto();
+  });
+
+  // ---- kick off ----
+  window.addEventListener("load", function () {
+    layoutBatons();
+    setTimeout(function () { layoutBatons(); runAuto(); }, 120);
+  });
+  layoutBatons();
+
+})();
+</script>
+
+</body>
+</html>

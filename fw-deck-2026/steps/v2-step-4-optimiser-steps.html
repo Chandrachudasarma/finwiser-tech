@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2 · Step ④ The Optimiser → Steps (DEAD) — single-column review</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  html, body { background: #111; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 24px;
+  }
+
+  /* review stage — column rendered at 1.6x for inspection; the column element
+     itself stays exactly 290 x 560 (the scale is on the wrapper only). */
+  .review-stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===================================================================== */
+  /* SHARED COLUMN CONTRACT — 290 x 560 box, dead variant                  */
+  /* ===================================================================== */
+  .node-col {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .step-box {
+    background: rgba(255,255,255,0.022);
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 16px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.20);
+    padding: 12px 8px 0;
+  }
+  .step-box.dead {
+    background: rgba(233,69,96,0.028);
+    border: 1px dashed rgba(233,69,96,0.30);
+    border-radius: 16px;
+    box-shadow: none;
+    filter: saturate(0.85);
+    padding: 12px 8px 0;
+  }
+
+  /* ===================================================================== */
+  /* ====  NODE ④  — The Optimiser → Steps (DEAD / never delivered)  ===== */
+  /* All inner geometry is absolutely positioned from the box top inner    */
+  /* edge so it lands on the SHARED VERTICAL GRID exactly.                  */
+  /* ===================================================================== */
+  #s4 { position: relative; width: 100%; height: 100%; text-align: center; color: #fff; }
+
+  /* ---- Avatar 54px, centered, near top (~y 12). DEAD: dark/locked. ---- */
+  #s4 .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 21px; font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.30); box-shadow: none; opacity: 0.6;
+  }
+  #s4 .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: #16213e; border: 1px solid rgba(233,69,96,0.45);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--accent-soft);
+  }
+
+  /* ---- Role title centered, Inter 800 ~18px, MUTED, baseline ~y 86. ---- */
+  #s4 .role {
+    position: absolute; top: 76px; left: 0; right: 0;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px; line-height: 1;
+    color: rgba(255,255,255,0.42);
+  }
+
+  /* ---- Question — RESERVED 2-LINE band (min-height 38px) starting ~y100. */
+  #s4 .question {
+    position: absolute; top: 100px; left: 18px; right: 18px;
+    min-height: 38px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    color: rgba(255,255,255,0.40);
+  }
+  #s4 .question .strong { font-weight: 700; color: rgba(255,255,255,0.55); }
+
+  /* ---- Dependency strip — compact, just UNDER the question, NOT inside   */
+  /*      the card. Reads "can't even start". Sits in the y100..152 gap.    */
+  #s4 .deps {
+    position: absolute; top: 124px; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.34);
+    letter-spacing: 0.2px;
+  }
+  #s4 .deps .lbl { color: rgba(255,255,255,0.34); }
+  #s4 .deps .dpill {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1px solid rgba(0,184,148,0.30); background: rgba(0,184,148,0.06);
+    color: rgba(0,184,148,0.60); font-size: 10px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  #s4 .deps .feed { color: rgba(255,255,255,0.40); font-weight: 700; margin: 0 1px; }
+  #s4 .deps .cross {
+    color: var(--accent); font-weight: 900; font-size: 13px;
+    margin-left: 1px; text-shadow: 0 0 10px rgba(233,69,96,0.5);
+  }
+
+  /* ===================================================================== */
+  /* ANSWER CARD — TOP exactly y152, HEIGHT exactly 168 (bottom y320).      */
+  /* DEAD variant: red-tinted / dashed. Holds the GHOST checklist + stamp.  */
+  /* ===================================================================== */
+  #s4 .ans-card {
+    position: absolute; top: 152px; left: 18px; right: 18px; height: 168px;
+    border-radius: 12px;
+    border: 1px dashed rgba(233,69,96,0.34);
+    background: rgba(233,69,96,0.035);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.015);
+    padding: 13px 14px;
+    overflow: hidden;
+  }
+
+  /* section label — shared component: uppercase Inter 700 8.5px */
+  #s4 .ans-card .cl-title {
+    font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: rgba(255,255,255,0.40); text-align: left; margin-bottom: 11px;
+  }
+
+  /* the ghost checklist — the advice that never arrived, faintly legible */
+  #s4 .checklist { position: relative; }
+  #s4 .cl-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    text-align: left; margin-bottom: 11px;
+  }
+  #s4 .cl-item:last-child { margin-bottom: 0; }
+  #s4 .cl-item .tick {
+    flex-shrink: 0; width: 13px; height: 13px; margin-top: 1px;
+    border: 1.4px dashed rgba(255,255,255,0.22); border-radius: 3.5px;
+    background: rgba(255,255,255,0.015);
+  }
+  #s4 .cl-item .txt {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 11px; line-height: 1.35; color: rgba(255,255,255,0.30);
+  }
+  #s4 .cl-item .blank {
+    color: rgba(255,107,129,0.55); font-weight: 700; letter-spacing: 0.5px;
+    border-bottom: 1px dashed rgba(255,107,129,0.35); padding: 0 1px;
+  }
+
+  /* "never delivered" stamp — lands harder: bolder ring, faint glow,
+     sits across the locked-away advice. */
+  #s4 .stamp {
+    position: absolute; left: 50%; top: 58%;
+    transform: translate(-50%,-50%) rotate(-8deg); white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    color: #ff8095;
+    padding: 7px 15px; border: 2px solid rgba(233,69,96,0.62); border-radius: 7px;
+    background: rgba(18,24,46,0.82);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.45), 0 0 26px rgba(233,69,96,0.18);
+    text-shadow: 0 0 12px rgba(233,69,96,0.4);
+  }
+  #s4 .stamp .lk { font-size: 12px; filter: saturate(0.9); }
+  #s4 .stamp .txt { text-transform: lowercase; }
+
+  /* ===================================================================== */
+  /* ANSWER-CHIP SLOT at y 344 — stays EMPTY (dead, no green pill).         */
+  /* tiny muted dead marker, centered.                                     */
+  /* ===================================================================== */
+  #s4 .chip-slot {
+    position: absolute; top: 344px; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #s4 .chip-slot .dead-marker {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+    color: rgba(255,255,255,0.30);
+  }
+  #s4 .chip-slot .dead-marker .x {
+    color: rgba(233,69,96,0.6); font-weight: 900;
+  }
+
+  /* ===================================================================== */
+  /* WHY band — absolutely positioned top 410, left/right 18.              */
+  /* ===================================================================== */
+  #s4 .why {
+    position: absolute; top: 410px; left: 18px; right: 18px;
+    padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.10);
+    text-align: left;
+  }
+  #s4 .why .why-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700;
+    color: rgba(255,255,255,0.40); margin-bottom: 7px;
+  }
+  #s4 .why-list { list-style: none; margin: 0; padding: 0; text-align: left; }
+  #s4 .why-list li {
+    position: relative; padding-left: 16px;
+    font-size: 12.5px; line-height: 1.38; font-weight: 500;
+    color: rgba(255,255,255,0.55); margin-bottom: 6px;
+  }
+  #s4 .why-list li:last-child { margin-bottom: 0; }
+  #s4 .why-list li::before {
+    content: "✕"; position: absolute; left: 0; top: 0.5px;
+    font-size: 10px; color: var(--accent); font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+  <div class="review-stage">
+    <!-- ===== NODE ④ — The Optimiser → Steps (DEAD) ===== -->
+    <div class="node-col step-box dead">
+      <div id="s4">
+
+        <!-- Avatar — locked -->
+        <div class="avatar">4<span class="lock">🔒</span></div>
+
+        <!-- Role — muted -->
+        <div class="role">The Optimiser → Steps</div>
+
+        <!-- Question — reserved 2-line band -->
+        <div class="question">Plan each goal — and tell you <span class="strong">exactly what to do.</span></div>
+
+        <!-- Dependency strip — "can't even start" -->
+        <div class="deps">
+          <span class="lbl">needs</span>
+          <span class="dpill">1</span><span class="dpill">2</span><span class="dpill">3</span>
+          <span class="feed">→</span><span class="cross">✕</span>
+        </div>
+
+        <!-- ANSWER CARD — top 152, height 168 — the ghost advice -->
+        <div class="ans-card">
+          <div class="checklist">
+            <div class="cl-title">Your next 3 actions</div>
+            <div class="cl-item">
+              <span class="tick"></span>
+              <span class="txt">Move <span class="blank">₹__</span> idle savings → liquid fund</span>
+            </div>
+            <div class="cl-item">
+              <span class="tick"></span>
+              <span class="txt">Top up term cover by <span class="blank">₹__</span></span>
+            </div>
+            <div class="cl-item">
+              <span class="tick"></span>
+              <span class="txt">Start <span class="blank">₹__</span>/mo SIP for the 20-yr goal</span>
+            </div>
+            <div class="stamp">
+              <span class="lk">🔒</span><span class="txt">— never delivered —</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHIP SLOT — empty (dead); tiny muted marker only, no green pill -->
+        <div class="chip-slot">
+          <span class="dead-marker"><span class="x">✕</span>no advice reaches you</span>
+        </div>
+
+        <!-- WHY band -->
+        <div class="why">
+          <div class="why-label">Why this is hard</div>
+          <ul class="why-list">
+            <li>The only step that changes your life</li>
+            <li>Needs all three above, joined up</li>
+            <li>Miss one piece and the advice is never complete</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

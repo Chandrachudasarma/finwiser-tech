@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2 · Step ③ — The Cashflow Reader</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #00b894;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+  }
+
+  /* review stage: center + scale the raw column 1.6x; the box itself stays 290x560 */
+  .stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* === SHARED CONTRACT: the column box (290 x 560) === */
+  .step-box {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+    background: rgba(255,255,255,0.022);
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 16px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.20);
+    padding: 12px 8px 0;
+  }
+
+  /* ===================================================================== */
+  /* NODE ③ — The Cashflow Reader (resolved / green)                       */
+  /* every selector prefixed under #s3                                     */
+  /* ===================================================================== */
+  /* #s3 is static so the grid-positioned children (.ans-card / .cap-chip / .why)
+     anchor to .step-box's border box — i.e. the box top edge — matching the
+     shared vertical grid (152 / 168 / 344 / 410). */
+  #s3 { position: static; width: 100%; height: 100%; color: #fff; text-align: center; }
+
+  /* --- Avatar: 54px circle, centered, top ~12, green ring --- */
+  #s3 .avatar {
+    width: 54px; height: 54px; margin: 0 auto;
+    border-radius: 50%;
+    background: rgba(0,184,148,0.10);
+    border: 1px solid rgba(0,184,148,0.55);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Courier Prime', monospace;
+    font-size: 22px; font-weight: 700; color: var(--green);
+    position: relative;
+  }
+  #s3 .avatar .ring {
+    position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid rgba(0,184,148,0.40);
+  }
+
+  /* --- Role title: Inter 800 ~18px, green, baseline ~y86 --- */
+  #s3 .role {
+    margin-top: 12px;
+    font-size: 18px; font-weight: 800; letter-spacing: 0.1px;
+    color: var(--green); line-height: 1;
+  }
+
+  /* --- Question: reserved 2-line band (min-height 38), starts ~y100 --- */
+  #s3 .question {
+    margin-top: 12px;
+    min-height: 38px;
+    font-size: 13px; line-height: 1.45; font-weight: 400;
+    opacity: 0.82; max-width: 250px; margin-left: auto; margin-right: auto;
+  }
+  #s3 .question .strong { font-weight: 700; opacity: 0.97; }
+
+  /* --- ANSWER CARD: TOP exactly 152, HEIGHT exactly 168 (bottom 320) --- */
+  #s3 .ans-card {
+    position: absolute;
+    top: 152px; left: 8px; right: 8px;
+    height: 168px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 13px;
+    text-align: left;
+    display: flex; flex-direction: column;
+  }
+  #s3 .ans-card .card-label {
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 8.5px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* --- the bar visual: full income bar, expenses consuming most, green leftover slice --- */
+  #s3 .bars { margin-top: 11px; }
+  #s3 .bar-row { margin-bottom: 9px; }
+  #s3 .bar-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  #s3 .bar-head .lab {
+    font-family: 'Inter', sans-serif; font-size: 12px;
+    color: rgba(255,255,255,0.62);
+  }
+  #s3 .bar-head .amt {
+    font-family: 'Courier Prime', monospace; font-size: 13px; font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  #s3 .bar-head .amt.in  { color: #fff; }
+  #s3 .bar-head .amt.out { color: var(--accent-soft); }
+
+  #s3 .track {
+    position: relative;
+    height: 13px; border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    overflow: hidden;
+  }
+  /* income = the full track (faint white fill, the "100%") */
+  #s3 .fill-in {
+    position: absolute; inset: 0;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.30), rgba(255,255,255,0.18));
+    border-radius: 4px;
+  }
+  /* expenses bar: a SECOND track underneath income, filled pink to ~71.4% (132/185) */
+  #s3 .fill-out {
+    position: absolute; top: 0; bottom: 0; left: 0;
+    width: 71.4%;
+    background: linear-gradient(90deg, rgba(233,69,96,0.55), rgba(255,107,129,0.55));
+    border-radius: 4px;
+  }
+  /* the leftover slice on the EXPENSES track, highlighted green = the surplus */
+  #s3 .fill-left {
+    position: absolute; top: 0; bottom: 0; right: 0;
+    width: 28.6%;
+    background: linear-gradient(90deg, rgba(0,184,148,0.85), rgba(0,184,148,0.65));
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 10px rgba(0,184,148,0.45);
+  }
+  /* thin divider seam between spent and leftover */
+  #s3 .seam {
+    position: absolute; top: -1px; bottom: -1px; left: 71.4%;
+    width: 1px; background: rgba(0,0,0,0.45);
+  }
+
+  /* --- the hero surplus readout, anchored to bottom of card --- */
+  #s3 .hero {
+    margin-top: auto;
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,184,148,0.30);
+  }
+  #s3 .hero .h-lab {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+    color: var(--green);
+  }
+  #s3 .hero .h-lab .swatch {
+    width: 9px; height: 9px; border-radius: 2px;
+    background: var(--green); box-shadow: 0 0 6px rgba(0,184,148,0.7);
+  }
+  #s3 .hero .h-val {
+    font-family: 'Courier Prime', monospace;
+    font-size: 23px; font-weight: 700; letter-spacing: -0.8px;
+    color: var(--green); line-height: 1;
+    text-shadow: 0 0 14px rgba(0,184,148,0.40);
+  }
+  #s3 .hero .h-val .per {
+    font-size: 11px; font-weight: 600; opacity: 0.7; letter-spacing: 0;
+  }
+
+  /* --- ANSWER CHIP: vertical center at y344 --- */
+  #s3 .cap-chip {
+    position: absolute;
+    top: 344px; left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,184,148,0.08);
+    border: 1px solid rgba(0,184,148,0.35);
+    color: var(--green);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px; font-weight: 600;
+    white-space: nowrap;
+  }
+  #s3 .cap-chip .glyph { font-family: 'Courier Prime', monospace; font-weight: 700; }
+
+  /* --- WHY band: absolute top 410, left/right 18, left aligned --- */
+  #s3 .why {
+    position: absolute;
+    top: 410px; left: 18px; right: 18px;
+    text-align: left;
+  }
+  #s3 .why .why-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--muted); margin-bottom: 7px;
+  }
+  #s3 .why-list { list-style: none; }
+  #s3 .why-list li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 12.5px; line-height: 1.42;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 5px;
+  }
+  #s3 .why-list li::before {
+    content: "—";
+    position: absolute; left: 0; top: 0;
+    color: var(--accent-soft); font-weight: 700;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="step-box">
+      <div id="s3">
+        <div class="avatar">3<span class="ring"></span></div>
+        <div class="role">The Cashflow Reader</div>
+        <div class="question">Money <span class="strong">in</span>, money <span class="strong">out</span> — what's <span class="strong">really left to invest</span>.</div>
+
+        <div class="ans-card">
+          <div class="card-label">Monthly cashflow · resolved</div>
+          <div class="bars">
+            <!-- INCOME: the full bar = 100% -->
+            <div class="bar-row">
+              <div class="bar-head">
+                <span class="lab">Income in</span>
+                <span class="amt in">&#8377;1,85,000</span>
+              </div>
+              <div class="track">
+                <div class="fill-in"></div>
+              </div>
+            </div>
+            <!-- EXPENSES: consumes most of the same width; leftover slice = green surplus -->
+            <div class="bar-row">
+              <div class="bar-head">
+                <span class="lab">Real expenses out</span>
+                <span class="amt out">&#8377;1,32,000</span>
+              </div>
+              <div class="track">
+                <div class="fill-out"></div>
+                <div class="fill-left"></div>
+                <div class="seam"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero">
+            <span class="h-lab"><span class="swatch"></span>Real surplus</span>
+            <span class="h-val">&#8377;53,000<span class="per">/mo</span></span>
+          </div>
+        </div>
+
+        <div class="cap-chip"><span class="glyph">&#8377;</span> real investable surplus</div>
+
+        <div class="why">
+          <div class="why-label">Why this is hard</div>
+          <ul class="why-list">
+            <li>1,000s of transactions, across every bank + card</li>
+            <li>Tracking by hand means logging every spend, every day</li>
+            <li>So people guess their surplus — and guess high</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

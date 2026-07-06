@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2 · Step ① The Goal-Setter — column mock</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%2300b894'/%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  html, body { background: #0d0d18; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px;
+  }
+
+  /* review stage — column shown at 1.6x; the column itself stays 290x560 */
+  .stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===================================================================== */
+  /* SHARED COLUMN CONTRACT — 290 x 560 box                                */
+  /* ===================================================================== */
+  .step-box {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+    background: rgba(255,255,255,0.022);
+    border: 1px solid rgba(255,255,255,0.085);
+    border-radius: 16px;
+    box-shadow: 0 10px 34px rgba(0,0,0,0.20);
+    padding: 12px 8px 0;
+    color: #fff;
+  }
+
+  /* ===================================================================== */
+  /* ============  NODE ①  — The Goal-Setter (resolved/green)  ============ */
+  /* All vertical positions are FIXED to the shared grid (measured from    */
+  /* the box top INNER edge, i.e. 12px below the box top).                 */
+  /* ===================================================================== */
+  #s1 { position: absolute; inset: 0; }
+
+  /* --- Avatar: 54px circle, centered, top of grid (~y12) --- */
+  #s1 .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; color: #fff;
+    border: 2px solid var(--green);
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+  }
+  #s1 .avatar .ring { position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(0,184,148,0.4); }
+
+  /* --- Role title: green, Inter 800 ~18px, baseline ~y86 --- */
+  #s1 .role {
+    position: absolute; top: 74px; left: 0; right: 0; text-align: center;
+    font-size: 18px; font-weight: 800; letter-spacing: 0.2px; color: var(--green); line-height: 1;
+  }
+
+  /* --- Question: centered, reserved 2-line band from ~y100, min-height 38 --- */
+  #s1 .question {
+    position: absolute; top: 100px; left: 18px; right: 18px;
+    min-height: 38px;
+    font-size: 13px; line-height: 1.45; opacity: 0.82; font-weight: 400; text-align: center;
+  }
+  #s1 .question .strong { font-weight: 700; opacity: 0.97; }
+
+  /* ================= ANSWER CARD — top 152, height 168 ================= */
+  #s1 .ans-card {
+    position: absolute; top: 152px; left: 18px; right: 18px; height: 168px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 13px;
+    /* soft green resolved-state glow, kept on-system */
+    box-shadow: 0 0 26px rgba(0,184,148,0.10), inset 0 0 0 1px rgba(0,184,148,0.06);
+    display: flex; flex-direction: column;
+  }
+
+  /* NEAR —————— FAR axis: the time-pull spine the rungs hang from */
+  #s1 .ans-card .axis {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 8.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 8px;
+  }
+  #s1 .ans-card .axis .near { color: var(--accent-soft); }
+  #s1 .ans-card .axis .far  { color: #6cc8ff; }
+  #s1 .ans-card .axis .line {
+    flex: 1; height: 2px; border-radius: 2px;
+    background: linear-gradient(90deg, rgba(233,69,96,0.55) 0%, rgba(255,255,255,0.16) 50%, rgba(108,200,255,0.55) 100%);
+  }
+
+  /* the ladder of 4 ranked rungs */
+  #s1 .ladder { display: flex; flex-direction: column; gap: 6px; }
+  #s1 .rung {
+    display: flex; align-items: center; gap: 9px;
+    height: 26px; padding: 0 4px;
+  }
+  #s1 .rung .rank {
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Courier Prime', Courier, monospace; font-size: 11px; font-weight: 700;
+    color: var(--green); background: rgba(0,184,148,0.14); border: 1px solid rgba(0,184,148,0.4);
+  }
+  #s1 .rung .goal {
+    flex: 1; min-width: 0;
+    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.92); line-height: 1.1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* horizon pill — width-tied time-pull marker; color = NEAR(warm) → FAR(cool) */
+  #s1 .rung .horizon {
+    flex-shrink: 0;
+    font-family: 'Courier Prime', Courier, monospace; font-size: 11px; font-weight: 700;
+    text-align: center; min-width: 46px;
+    padding: 2px 8px; border-radius: 999px; white-space: nowrap; line-height: 1.25;
+  }
+  /* tier 1 — nearest, hottest */
+  #s1 .horizon.h-now { color: #ff8a9c; background: rgba(233,69,96,0.15); border: 1px solid rgba(255,107,129,0.5); }
+  /* tier 2 — near */
+  #s1 .horizon.h-near { color: #ffb39c; background: rgba(255,140,90,0.12); border: 1px solid rgba(255,160,110,0.40); }
+  /* tier 3 — far */
+  #s1 .horizon.h-far { color: #9ec8e8; background: rgba(120,170,220,0.10); border: 1px solid rgba(140,185,230,0.35); }
+  /* tier 4 — farthest, coolest */
+  #s1 .horizon.h-farthest { color: #6cc8ff; background: rgba(108,200,255,0.12); border: 1px solid rgba(108,200,255,0.45); }
+
+  /* ============ ANSWER CHIP — vertical center at y 344 ============ */
+  #s1 .cap-chip {
+    position: absolute; top: 344px; left: 50%; transform: translate(-50%, -50%);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; white-space: nowrap;
+    color: var(--green); background: rgba(0,184,148,0.08); border: 1px solid rgba(0,184,148,0.35);
+    box-shadow: 0 0 22px rgba(0,184,148,0.22);
+  }
+  #s1 .cap-chip .tick { font-size: 11px; font-weight: 800; }
+
+  /* ================= WHY band — absolute top 410 ================= */
+  #s1 .why {
+    position: absolute; top: 410px; left: 18px; right: 18px;
+    padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.10); text-align: left;
+  }
+  #s1 .why .why-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700;
+    color: var(--muted); margin-bottom: 7px;
+  }
+  #s1 .why-list { list-style: none; margin: 0; padding: 0; }
+  #s1 .why-list li {
+    position: relative; padding-left: 15px;
+    font-size: 12.5px; line-height: 1.38; font-weight: 500; color: rgba(255,255,255,0.86);
+    margin-bottom: 6px;
+  }
+  #s1 .why-list li:last-child { margin-bottom: 0; }
+  #s1 .why-list li::before {
+    content: "—"; position: absolute; left: 0; color: var(--accent-soft); font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <div class="step-box">
+      <div id="s1">
+
+        <!-- Avatar -->
+        <div class="avatar">1<span class="ring"></span></div>
+
+        <!-- Role -->
+        <div class="role">The Goal-Setter</div>
+
+        <!-- Question (reserved 2-line band) -->
+        <div class="question">What matters most — <span class="strong">and by when?</span></div>
+
+        <!-- ANSWER CARD: prioritized goal ladder on a NEAR→FAR axis -->
+        <div class="ans-card">
+          <div class="axis">
+            <span class="near">Near</span>
+            <span class="line"></span>
+            <span class="far">Far</span>
+          </div>
+          <div class="ladder">
+            <div class="rung">
+              <span class="rank">1</span>
+              <span class="goal">Emergency fund</span>
+              <span class="horizon h-now">now</span>
+            </div>
+            <div class="rung">
+              <span class="rank">2</span>
+              <span class="goal">New car</span>
+              <span class="horizon h-near">2 yr</span>
+            </div>
+            <div class="rung">
+              <span class="rank">3</span>
+              <span class="goal">Kids' education</span>
+              <span class="horizon h-far">15 yr</span>
+            </div>
+            <div class="rung">
+              <span class="rank">4</span>
+              <span class="goal">Retirement</span>
+              <span class="horizon h-farthest">25 yr</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANSWER CHIP -->
+        <div class="cap-chip"><span class="tick">✓</span>Priorities + timelines</div>
+
+        <!-- WHY band -->
+        <div class="why">
+          <div class="why-label">Why this is hard</div>
+          <ul class="why-list">
+            <li>People can't rank their own goals</li>
+            <li>No real dates or amounts on them</li>
+            <li>The same money can't cover a 2-yr <em>and</em> a 20-yr goal</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 4b — The Investment Adviser (dead climax)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent-hot: #ff5470;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: #111;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* dark premium gradient — reused verbatim from the deck */
+    background:
+      radial-gradient(900px 600px at 50% 40%, rgba(233,69,96,0.05), transparent 70%),
+      linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+  }
+
+  /* review stage — scales the column up ~1.6x without touching its 290x560 contract */
+  .stage {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ===================================================================== */
+  /* the column keeps its raw 290 x 560 contract                            */
+  /* ===================================================================== */
+  .node-col {
+    width: 290px;
+    height: 560px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  /* ④ — the dead step: fainter, desaturated, dashed red-tinted border */
+  .step-box.dead {
+    background: rgba(233,69,96,0.028);
+    border: 1px dashed rgba(233,69,96,0.30);
+    box-shadow: none;
+    filter: saturate(0.85);
+    border-radius: 16px;
+    padding: 12px 8px 0;
+  }
+
+  /* ===================================================================== */
+  /* NODE ④b — The Investment Adviser (DEAD / climax)                       */
+  /* static so absolute children anchor to the .node-col box edge           */
+  /* ===================================================================== */
+  #s4 { position: static; width: 100%; height: 100%; text-align: center; color: #fff; }
+
+  /* ① AVATAR — locked, dead ------------------------------------------------ */
+  #s4 .avatar {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.30); box-shadow: none; opacity: 0.78;
+  }
+  #s4 .avatar .lock {
+    position: absolute; right: -4px; bottom: -4px; width: 20px; height: 20px; border-radius: 50%;
+    background: #16213e; border: 1px solid rgba(233,69,96,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--accent-soft);
+  }
+
+  /* ② ROLE — muted ---------------------------------------------------------- */
+  #s4 .role {
+    position: absolute; top: 86px; left: 0; right: 0;
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px; line-height: 1;
+    color: rgba(255,255,255,0.42);
+  }
+
+  /* ③ WANT LINE — the question slot ---------------------------------------- */
+  #s4 .want {
+    position: absolute; top: 112px; left: 22px; right: 22px;
+    min-height: 38px;
+    font-size: 13px; line-height: 1.5; font-weight: 400;
+    color: rgba(255,255,255,0.45);
+  }
+  #s4 .want .strong { font-weight: 700; color: rgba(255,255,255,0.60); }
+
+  /* ③b THE CATCH — the cause line, sits above the prize and explains the ghost */
+  #s4 .catch {
+    position: absolute; top: 156px; left: 20px; right: 20px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px; line-height: 1.5; font-weight: 500;
+    color: rgba(255,255,255,0.62); letter-spacing: 0.1px;
+  }
+  #s4 .catch .hot { color: var(--accent-soft); font-weight: 600; }
+
+  /* ④ THE PRIZE — the emotional centre ------------------------------------- */
+  #s4 .prize {
+    position: absolute; top: 204px; left: 18px; right: 18px; height: 168px;
+    border-radius: 12px;
+    border: 1px dashed rgba(233,69,96,0.34);
+    background: rgba(233,69,96,0.035);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.015);
+    padding: 14px 15px;
+    overflow: hidden;
+  }
+  #s4 .prize .pz-title {
+    font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: rgba(255,255,255,0.40); text-align: left; margin-bottom: 13px;
+  }
+
+  #s4 .actions { position: relative; }
+  #s4 .act-row {
+    display: flex; align-items: flex-start; gap: 9px;
+    text-align: left; margin-bottom: 13px;
+  }
+  #s4 .act-row:last-child { margin-bottom: 0; }
+  /* empty / unchecked box */
+  #s4 .act-row .box {
+    flex-shrink: 0; width: 13px; height: 13px; margin-top: 1px;
+    border: 1.4px dashed rgba(255,255,255,0.22); border-radius: 3.5px;
+    background: rgba(255,255,255,0.015);
+  }
+  #s4 .act-row .txt {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 11px; line-height: 1.38; color: rgba(255,255,255,0.30);
+  }
+  /* the blanked ₹__ — the answer, right there, unfilled */
+  #s4 .act-row .blank {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,107,129,0.55); letter-spacing: 0.5px;
+    border-bottom: 1px dashed rgba(255,107,129,0.35); padding: 0 1px;
+  }
+
+  /* THE BROKEN-CHAIN MARK — the snapped link laid diagonally across the prize.
+     Reuses the connector's snapped-link visual style (two oblong link-halves on
+     different offset angles + a red snap-burst), but composed as one diagonal
+     sweep so it reads "the chain snaps right here". Sits ON TOP of the ghost
+     actions; the ghost rows stay faintly visible behind it. ---------------- */
+  #s4 .snap {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%) rotate(38deg);
+    width: 150px; height: 190px;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  /* ⑤ THE QUIET COUPLET — the calm closing thought ------------------------- */
+  #s4 .verdict {
+    position: absolute; top: 416px; left: 20px; right: 20px; bottom: 0;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    text-align: center;
+  }
+  #s4 .verdict .principle {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; line-height: 1.45; font-weight: 700;
+    color: rgba(255,255,255,0.90);
+    letter-spacing: 0.1px;
+    max-width: 240px;
+  }
+  #s4 .verdict .cause {
+    margin-top: 11px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px; line-height: 1.5; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.1px;
+    max-width: 240px;
+  }
+  #s4 .verdict .cause .hot { color: var(--accent-soft); font-weight: 600; }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <div class="node-col step-box dead">
+      <div id="s4">
+
+        <!-- ① AVATAR — locked, dead -->
+        <div class="avatar">4<span class="lock">🔒</span></div>
+
+        <!-- ② ROLE — muted -->
+        <div class="role">The Investment Adviser</div>
+
+        <!-- ③ MANDATE — what it should do -->
+        <div class="want">Should see your whole picture — and tell you <span class="strong">exactly what to do.</span></div>
+
+        <!-- ③b THE CATCH — the cause, now ABOVE the actions -->
+        <div class="catch"><span class="hot">Break one link</span> — and no one sees your whole picture.</div>
+
+        <!-- ④ THE PRIZE — ghosted actions with the loud stamp slapped over -->
+        <div class="prize">
+          <div class="pz-title">Your next 3 actions</div>
+          <div class="actions">
+            <div class="act-row">
+              <span class="box"></span>
+              <span class="txt">Move <span class="blank">₹__</span> idle savings → liquid fund</span>
+            </div>
+            <div class="act-row">
+              <span class="box"></span>
+              <span class="txt">Top up term cover by <span class="blank">₹__</span></span>
+            </div>
+            <div class="act-row">
+              <span class="box"></span>
+              <span class="txt">Start <span class="blank">₹__</span>/mo SIP for your 20-yr goal</span>
+            </div>
+          </div>
+          <!-- THE LOSS — the snapped chain laid diagonally across the actions -->
+          <svg class="snap" viewBox="0 0 150 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="g-s4ghost" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="2.1" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- UPPER half: lifted up + right, shallow tilt; torn end points down to the break -->
+            <g transform="translate(13 -10) rotate(-30 75 62)">
+              <g filter="url(#g-s4ghost)" stroke="#ff6b81" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path d="M65 62 v-28 a11 11 0 0 1 22 0 v28"/>
+              </g>
+              <g filter="url(#g-s4ghost)" stroke="#e94560" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path d="M65 62 l7 6 l7 -6 l7 6"/>
+              </g>
+            </g>
+            <!-- LOWER half: dropped down + left, offset axis, steeper tilt; torn end points up to the break -->
+            <g transform="translate(-15 11) rotate(-61 75 110)">
+              <g filter="url(#g-s4ghost)" stroke="#ff5470" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path d="M65 110 v28 a11 11 0 0 0 22 0 v-28"/>
+              </g>
+              <g filter="url(#g-s4ghost)" stroke="#e94560" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path d="M65 110 l7 -6 l7 6 l7 -6"/>
+              </g>
+            </g>
+            <!-- snap-burst: red dashes flaring out of the break in the middle -->
+            <g filter="url(#g-s4ghost)" stroke="#ff5470" stroke-width="3.2" stroke-linecap="round">
+              <path d="M52 86 l-12 -5"/><path d="M59 78 l-6 -11"/>
+              <path d="M68 76 l-2 -12"/><path d="M79 78 l4 -11"/>
+              <path d="M60 98 l-13 2"/><path d="M88 86 l11 -4"/>
+              <path d="M86 99 l10 4"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- ⑤ THE QUIET COUPLET — the calm closing thought -->
+        <div class="verdict">
+          <div class="principle">It takes the whole chain to give complete advice.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>② The Portfolio Analyst — Relay Column (Last Frame)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --accent2: #0f3460;
+    --green: #00b894;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 28px;
+  }
+
+  .label {
+    color: #666;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* ===== REVIEW STAGE: dark gradient panel that hosts the lifted column ===== */
+  .stage {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 740px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 20px;
+  }
+
+  /* Enlarge ~1.6x for review, but the column itself stays exactly 290px so it
+     lifts cleanly into the 1200px relay slide. */
+  .column-scaler {
+    transform: scale(1.6);
+    transform-origin: center center;
+  }
+
+  /* ====================================================================== */
+  /* THE RELAY COLUMN — fixed 290px wide, ~560px tall                         */
+  /* ====================================================================== */
+  .relay-column {
+    width: 290px;
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    position: relative;
+  }
+
+  /* ---- (1) AVATAR — resolved/green state ---- */
+  .avatar {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 14px;
+    color: #fff;
+    border: 2px solid var(--green);
+    background: rgba(0,184,148,0.18);
+    box-shadow: 0 0 26px rgba(0,184,148,0.5);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar .ring {
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,184,148,0.4);
+  }
+
+  /* ---- (2) ROLE TITLE ---- */
+  .role {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    margin-bottom: 8px;
+    color: var(--green);
+    line-height: 1.2;
+  }
+
+  /* ---- (3) HUMAN QUESTION ---- */
+  .question {
+    font-size: 13px;
+    line-height: 1.45;
+    opacity: 0.8;
+    max-width: 250px;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .question .strong { font-weight: 700; opacity: 0.98; }
+
+  /* ---- (4) THE MESS-AS-RESOLVED MIDDLE ---- */
+  .work {
+    width: 100%;
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  /* faint ghost of the eaten mess — scattered asset chips behind the answer */
+  .mess {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .mess .m {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 11px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.22);     /* grey = mess/consumed */
+    white-space: nowrap;
+    transform: translate(-50%,-50%);
+    filter: blur(0.4px);
+  }
+  /* a soft vignette so the ghost fades under the resolved card */
+  .mess::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 62% 56% at 50% 50%,
+      rgba(22,33,62,0.92) 0%,
+      rgba(22,33,62,0.62) 45%,
+      rgba(22,33,62,0) 78%);
+    pointer-events: none;
+  }
+
+  /* the consolidated truth — hero card */
+  .truth {
+    position: relative;
+    z-index: 2;
+    width: 246px;
+    background: rgba(0,184,148,0.05);
+    border: 1px solid rgba(0,184,148,0.30);
+    border-radius: 14px;
+    padding: 14px 14px 13px;
+    box-shadow: 0 0 30px rgba(0,184,148,0.18);
+  }
+
+  .truth-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 7px 0;
+  }
+  .truth-row + .truth-row { border-top: 1px solid rgba(255,255,255,0.07); }
+
+  .tr-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+  }
+  .tr-val {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .tr-val.green { color: var(--green); }
+
+  /* net-worth highlighted row */
+  .truth-row.net .tr-label { color: rgba(255,255,255,0.7); }
+  .truth-row.net .tr-val { font-size: 18px; }
+
+  /* protection line — the flagged gap */
+  .protect {
+    margin-top: 9px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.14);
+    text-align: left;
+  }
+  .protect .p-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .protect .p-line {
+    font-family: 'Courier Prime', Courier, monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.85);
+  }
+  .protect .gap {
+    color: var(--accent-soft);
+    font-weight: 700;
+  }
+  .protect .flag {
+    display: inline-block;
+    margin-left: 2px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    border: 1px solid rgba(233,69,96,0.45);
+    background: rgba(233,69,96,0.10);
+    padding: 1px 6px;
+    border-radius: 10px;
+    vertical-align: middle;
+  }
+
+  /* the small green "one truth" chip capping the answer */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px auto 0;
+    padding: 7px 14px;
+    border-radius: 22px;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    border: 1px solid rgba(0,184,148,0.55);
+    background: rgba(0,184,148,0.12);
+    color: var(--green);
+    box-shadow: 0 0 22px rgba(0,184,148,0.32);
+  }
+  .chip::before {
+    content: '✓';
+    font-weight: 800;
+  }
+
+  /* ---- (5) BOTTOM CAPTION — WHY THIS IS HARD ---- */
+  .why {
+    margin-top: 14px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .why .why-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .why .why-text {
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.6);
+    max-width: 270px;
+    margin: 0 auto;
+  }
+
+  /* ===== RATIONALE PANEL (same convention as reference files) ===== */
+  .rationale {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 4px;
+    padding: 32px 40px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .rationale .rat-head {
+    color: #f39c12;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .rat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .rat-grid .t { color: white; font-weight: 600; margin-bottom: 4px; }
+
+  @media (max-width: 900px) {
+    .column-scaler { transform: scale(1.05); }
+    .stage { padding: 40px 16px; min-height: 640px; }
+    .rat-grid { grid-template-columns: 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<p class="label">Relay Column — ② The Portfolio Analyst · last frame (resolved)</p>
+
+<div class="stage">
+  <div class="column-scaler">
+
+    <!-- ================= RELAY COLUMN (290px) ================= -->
+    <div class="relay-column">
+
+      <!-- (1) avatar with node number + green state glow -->
+      <div class="avatar">2<span class="ring"></span></div>
+
+      <!-- (2) role title -->
+      <div class="role">The Portfolio Analyst</div>
+
+      <!-- (3) the human question it owns -->
+      <div class="question">
+        What you <span class="strong">OWN</span>, what you <span class="strong">OWE</span>,
+        what <span class="strong">PROTECTS</span> you.
+      </div>
+
+      <!-- (4) mess-as-resolved: clean truth over a ghost of the eaten mess -->
+      <div class="work">
+
+        <!-- faint ghost: ~16 scattered silos, consumed -->
+        <div class="mess" id="mess"></div>
+
+        <!-- the consolidated truth (hero) -->
+        <div class="truth">
+          <div class="truth-row">
+            <span class="tr-label">Own · assets</span>
+            <span class="tr-val">₹42.6L</span>
+          </div>
+          <div class="truth-row">
+            <span class="tr-label">Owe · liabilities</span>
+            <span class="tr-val">₹18.2L</span>
+          </div>
+          <div class="truth-row net">
+            <span class="tr-label">Net worth</span>
+            <span class="tr-val green">₹24.4L</span>
+          </div>
+
+          <div class="protect">
+            <div class="p-label">Protect · cover vs need</div>
+            <div class="p-line">
+              Term cover ₹50L —
+              <span class="gap">gap vs need ₹1.2Cr</span>
+              <span class="flag">gap</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- green chip capping the answer -->
+      <div class="chip">One net-worth + protection truth</div>
+
+      <!-- (5) WHY THIS IS HARD -->
+      <div class="why">
+        <div class="why-label">Why this is hard</div>
+        <p class="why-text">
+          Your money lives in 30+ disconnected silos with no single source of
+          truth — and almost no one ever sees their real net worth, let alone
+          whether they're actually protected.
+        </p>
+      </div>
+
+    </div>
+    <!-- ============= /RELAY COLUMN ============= -->
+
+  </div>
+</div>
+
+<!-- ===== RATIONALE PANEL ===== -->
+<div class="rationale">
+  <p class="rat-head">Design Rationale</p>
+  <div class="rat-grid">
+    <div>
+      <p class="t">30 into 1</p>
+      <p>A salaried life is scattered across 30+ silos — MF, EPF, PPF, NPS, FDs, gold, loans, cards. The faint ghost behind the card is exactly that mess, consumed. The card is the one thing that was never assembled: a single OWN / OWE / NET truth.</p>
+    </div>
+    <div>
+      <p class="t">"What protects you" is the ignored leg</p>
+      <p>Everyone fixates on returns; almost no one checks cover against need. Surfacing a real protection gap (₹50L cover vs ₹1.2Cr need) is the part that decides whether a plan survives a bad year — so it's flagged in pink, not buried.</p>
+    </div>
+    <div>
+      <p class="t">Colour &amp; state system</p>
+      <p>Green (#00b894) = a hard leg resolved — net worth made whole. Grey (rgba 255,255,255,.22) = the dormant/consumed mess. Pink (#e94560 / #ff6b81) = the protection gap that demands action. Same vocabulary across all four relay columns.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  // Faint ghost of the eaten mess: 16 scattered silos (no single source of truth)
+  var labels = [
+    "MF","Stocks","EPF","PPF","NPS","FD","RD","Gold",
+    "ULIP","RSU/ESOP","Term cover","Health cover",
+    "Home loan","Car loan","Personal loan","Credit-card debt"
+  ];
+  // fixed pseudo-random scatter (% within the work box)
+  var pos = [
+    [12,10],[42,7],[74,12],[91,28],
+    [8,34],[33,30],[63,26],[88,46],
+    [14,52],[40,50],[70,52],[90,66],
+    [10,76],[34,80],[60,84],[84,86]
+  ];
+  var mess = document.getElementById("mess");
+  for (var i = 0; i < labels.length; i++) {
+    var el = document.createElement("div");
+    el.className = "m";
+    el.textContent = labels[i];
+    el.style.left = pos[i][0] + "%";
+    el.style.top = pos[i][1] + "%";
+    mess.appendChild(el);
+  }
+})();
+</script>
+
+</body>
+</html>
